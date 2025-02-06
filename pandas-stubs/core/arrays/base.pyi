@@ -3,6 +3,7 @@ from typing import Any
 import numpy as np
 from typing_extensions import Self
 
+from pandas._libs.lib import NoDefault
 from pandas._typing import (
     ArrayLike,
     Scalar,
@@ -22,7 +23,7 @@ class ExtensionArray:
         self,
         dtype: npt.DTypeLike | None = ...,
         copy: bool = ...,
-        na_value: Scalar = ...,
+        na_value: Scalar | NoDefault = ...,
     ) -> np.ndarray: ...
     @property
     def dtype(self) -> ExtensionDtype: ...

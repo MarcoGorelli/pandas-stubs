@@ -20,6 +20,7 @@ from pandas.core.arrays import ExtensionArray
 from pandas.core.arrays.categorical import Categorical
 from typing_extensions import Self
 
+from pandas._libs.lib import NoDefault
 from pandas._typing import (
     S1,
     AxisIndex,
@@ -62,7 +63,7 @@ class IndexOpsMixin(OpsMixin, Generic[S1]):
         self,
         dtype: npt.DTypeLike | None = ...,
         copy: bool = ...,
-        na_value: Scalar = ...,
+        na_value: Scalar | NoDefault = ...,
         **kwargs,
     ) -> np.ndarray: ...
     @property

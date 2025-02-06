@@ -4,6 +4,7 @@ from pandas.core.arrays import (
     ExtensionOpsMixin,
 )
 
+from pandas._libs.lib import NoDefault
 from pandas._typing import (
     Scalar,
     npt,
@@ -18,7 +19,7 @@ class BaseMaskedArray(ExtensionArray, ExtensionOpsMixin):
         self,
         dtype: npt.DTypeLike | None = ...,
         copy: bool = ...,
-        na_value: Scalar = ...,
+        na_value: Scalar | NoDefault = ...,
     ) -> np.ndarray: ...
     __array_priority__: int = ...
     def __array__(self, dtype=...) -> np.ndarray: ...

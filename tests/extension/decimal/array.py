@@ -22,7 +22,9 @@ from pandas.core.arrays import (
 )
 from pandas.core.indexers import check_array_indexer
 
+from pandas._libs.lib import NoDefault
 from pandas._typing import (
+    Scalar,
     TakeIndexer,
     type_t,
 )
@@ -119,7 +121,7 @@ class DecimalArray(OpsMixin, ExtensionScalarOpsMixin, ExtensionArray):
         self,
         dtype=None,
         copy: bool = False,
-        na_value: object = no_default,
+        na_value: Scalar | NoDefault = no_default,
         decimals=None,
     ) -> np.ndarray:
         result = np.asarray(self, dtype=dtype)

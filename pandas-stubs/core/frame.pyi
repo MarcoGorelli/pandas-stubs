@@ -343,7 +343,7 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
         self,
         dtype: npt.DTypeLike | None = ...,
         copy: bool = ...,
-        na_value: Scalar = ...,
+        na_value: Scalar | NoDefault = ...,
     ) -> np.ndarray: ...
     @overload
     def to_dict(

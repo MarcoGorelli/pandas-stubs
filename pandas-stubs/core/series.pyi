@@ -2128,7 +2128,7 @@ class Series(IndexOpsMixin[S1], NDFrame):
         self,
         dtype: npt.DTypeLike | None = ...,
         copy: bool = ...,
-        na_value: Scalar = ...,
+        na_value: Scalar | NoDefault = ...,
         **kwargs,
     ) -> np.ndarray: ...
     def tolist(self) -> list[S1]: ...
