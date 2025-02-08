@@ -2,6 +2,7 @@ from collections.abc import (
     Callable,
     Generator,
     Iterable,
+    Iterator,
     Mapping,
 )
 import sqlite3
@@ -142,7 +143,26 @@ def read_sql(
 ) -> DataFrame: ...
 
 class PandasSQL:
-    def read_sql(self, *args, **kwargs): ...
+    def read_query(
+        self,
+        sql: str,
+        index_col: str | list[str] | None = ...,
+        coerce_float: bool = ...,
+        parse_dates: (
+            list[str] | dict[str, str] | dict[str, dict[str, Any]] | None
+        ) = ...,
+        params: (
+            list[Scalar]
+            | tuple[Scalar, ...]
+            | tuple[tuple[Scalar, ...], ...]
+            | Mapping[str, Scalar]
+            | Mapping[str, tuple[Scalar, ...]]
+            | None
+        ) = ...,
+        chunksize: int | None = ...,
+        dtype: DtypeArg | None = ...,
+        dtype_backend: DtypeBackend | Literal["numpy"] = "numpy",
+    ) -> DataFrame | Iterator[DataFrame]: ...
     def to_sql(
         self,
         frame: DataFrame,
