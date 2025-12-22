@@ -6,7 +6,6 @@ from typing import (
 
 from pandas.core.arrays import (
     ExtensionArray as ExtensionArray,
-    ExtensionOpsMixin,
 )
 from pandas.core.series import Series
 from typing_extensions import Self
@@ -21,7 +20,7 @@ from pandas._typing import (
     npt,
 )
 
-class BaseMaskedArray(ExtensionArray, ExtensionOpsMixin):
+class BaseMaskedArray(ExtensionArray):
     @overload
     def __getitem__(self, item: ScalarIndexer) -> Any: ...
     @overload

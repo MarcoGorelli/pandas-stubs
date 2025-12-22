@@ -9,7 +9,6 @@ import numpy as np
 import numpy.typing as npt
 from pandas.core.arrays.base import (
     ExtensionArray,
-    ExtensionOpsMixin,
 )
 from typing_extensions import Self
 
@@ -59,7 +58,7 @@ class TimelikeOps:
         nonexistent: TimeNonexistent = "raise",
     ) -> Self: ...
 
-class DatetimeLikeArrayMixin(ExtensionOpsMixin, ExtensionArray):
+class DatetimeLikeArrayMixin(ExtensionArray):
     @property
     def ndim(self) -> int: ...
     def __array__(

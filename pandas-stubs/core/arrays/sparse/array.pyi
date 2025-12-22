@@ -9,7 +9,6 @@ from typing import (
 import numpy as np
 from pandas.core.arrays import (
     ExtensionArray,
-    ExtensionOpsMixin,
 )
 from typing_extensions import Self
 
@@ -29,7 +28,7 @@ from pandas.core.dtypes.dtypes import SparseDtype
 class ellipsis(Enum):
     Ellipsis = "..."
 
-class SparseArray(ExtensionArray, ExtensionOpsMixin):
+class SparseArray(ExtensionArray):
     if sys.version_info >= (3, 11):
         def __new__(
             cls,
