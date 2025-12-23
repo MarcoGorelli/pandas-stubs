@@ -30,38 +30,23 @@ from typing import (
     overload,
 )
 
-from matplotlib.axes import Axes as PlotAxes
 import numpy as np
 from numpy import typing as npt
 from pandas import (
-    Period,
     Timedelta,
     Timestamp,
 )
 from pandas.core.arraylike import OpsMixin
 from pandas.core.base import IndexOpsMixin
 from pandas.core.generic import NDFrame
-from pandas.core.groupby.generic import DataFrameGroupBy
 from pandas.core.indexers import BaseIndexer
 from pandas.core.indexes.base import Index
-from pandas.core.indexes.category import CategoricalIndex
-from pandas.core.indexes.datetimes import DatetimeIndex
-from pandas.core.indexes.interval import IntervalIndex
-from pandas.core.indexes.multi import MultiIndex
-from pandas.core.indexes.period import PeriodIndex
-from pandas.core.indexes.timedeltas import TimedeltaIndex
 from pandas.core.indexing import (
     _AtIndexer,
     _iAtIndexer,
     _iLocIndexer,
     _IndexSliceTuple,
     _LocIndexer,
-)
-from pandas.core.reshape.pivot import (
-    _PivotAggFunc,
-    _PivotTableColumnsTypes,
-    _PivotTableIndexTypes,
-    _PivotTableValuesTypes,
 )
 from pandas.core.series import Series
 from pandas.core.window import (
@@ -78,7 +63,6 @@ from typing_extensions import (
 )
 import xarray as xr
 
-from pandas._libs.lib import _NoDefaultDoNotUse
 from pandas._libs.missing import NAType
 from pandas._libs.tslibs import BaseOffset
 from pandas._typing import (
@@ -93,7 +77,6 @@ from pandas._typing import (
     ArrayLike,
     AstypeArg,
     Axes,
-    AxesData,
     Axis,
     AxisColumn,
     AxisIndex,
@@ -107,11 +90,9 @@ from pandas._typing import (
     FloatFormatType,
     FormattersType,
     Frequency,
-    GroupByObjectNonScalar,
     HashableT,
     HashableT1,
     HashableT2,
-    HashableT3,
     IgnoreRaise,
     IndexingInt,
     IndexKeyFunc,
@@ -119,7 +100,6 @@ from pandas._typing import (
     IndexType,
     InterpolateOptions,
     IntervalClosedType,
-    IntervalT,
     IntoColumn,
     JoinValidate,
     JsonFrameOrient,
@@ -128,7 +108,6 @@ from pandas._typing import (
     Level,
     ListLike,
     ListLikeExceptSeriesAndStr,
-    ListLikeHashable,
     ListLikeU,
     MaskType,
     MergeHow,
@@ -143,12 +122,10 @@ from pandas._typing import (
     ReadBuffer,
     ReindexMethod,
     Renamer,
-    ReplaceValue,
     Scalar,
     ScalarOrNA,
     ScalarT,
     SequenceNotStr,
-    SeriesByT,
     SortKind,
     StataDateFormat,
     StorageOptions,
@@ -174,8 +151,6 @@ from pandas._typing import (
 )
 
 from pandas.io.formats.style import Styler
-from pandas.plotting import PlotAccessor
-from pandas.plotting._core import _BoxPlotT
 
 _T_MUTABLE_MAPPING_co = TypeVar(
     "_T_MUTABLE_MAPPING_co", bound=MutableMapping, covariant=True
@@ -947,25 +922,25 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
         limit: int = ...,
         inplace: Literal[False] = False,
     ) -> Self: ...
-    @overload
-    def replace(
-        self,
-        to_replace: ReplaceValue | Mapping[HashableT2, ReplaceValue] = ...,
-        value: ReplaceValue | Mapping[HashableT3, ReplaceValue] = ...,
-        *,
-        inplace: Literal[True],
-        regex: ReplaceValue | Mapping[HashableT3, ReplaceValue] = ...,
-        # TODO: pandas-dev/pandas#63195 return Self after Pandas 3.0
-    ) -> None: ...
-    @overload
-    def replace(
-        self,
-        to_replace: ReplaceValue | Mapping[HashableT2, ReplaceValue] = ...,
-        value: ReplaceValue | Mapping[HashableT3, ReplaceValue] = ...,
-        *,
-        inplace: Literal[False] = False,
-        regex: ReplaceValue | Mapping[HashableT3, ReplaceValue] = ...,
-    ) -> Self: ...
+    # @overload
+    # def replace(
+    #     self,
+    #     to_replace: ReplaceValue | Mapping[HashableT2, ReplaceValue] = ...,
+    #     value: ReplaceValue | Mapping[HashableT3, ReplaceValue] = ...,
+    #     *,
+    #     inplace: Literal[True],
+    #     regex: ReplaceValue | Mapping[HashableT3, ReplaceValue] = ...,
+    #     # TODO: pandas-dev/pandas#63195 return Self after Pandas 3.0
+    # ) -> None: ...
+    # @overload
+    # def replace(
+    #     self,
+    #     to_replace: ReplaceValue | Mapping[HashableT2, ReplaceValue] = ...,
+    #     value: ReplaceValue | Mapping[HashableT3, ReplaceValue] = ...,
+    #     *,
+    #     inplace: Literal[False] = False,
+    #     regex: ReplaceValue | Mapping[HashableT3, ReplaceValue] = ...,
+    # ) -> Self: ...
     def shift(
         self,
         periods: int | Sequence[int] = ...,
@@ -1190,182 +1165,182 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
         filter_func: Callable[..., Any] | None = ...,
         errors: IgnoreRaise = "ignore",
     ) -> None: ...
-    @overload
-    def groupby(  # pyright: ignore reportOverlappingOverload
-        self,
-        by: Scalar,
-        level: IndexLabel | None = ...,
-        as_index: Literal[True] = True,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[Scalar, Literal[True]]: ...
-    @overload
-    def groupby(
-        self,
-        by: Scalar,
-        level: IndexLabel | None = ...,
-        as_index: Literal[False] = False,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[Scalar, Literal[False]]: ...
-    @overload
-    def groupby(  # pyright: ignore reportOverlappingOverload
-        self,
-        by: DatetimeIndex,
-        level: IndexLabel | None = ...,
-        as_index: Literal[True] = True,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[Timestamp, Literal[True]]: ...
-    @overload
-    def groupby(  # pyright: ignore reportOverlappingOverload
-        self,
-        by: DatetimeIndex,
-        level: IndexLabel | None = ...,
-        as_index: Literal[False] = False,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[Timestamp, Literal[False]]: ...
-    @overload
-    def groupby(  # pyright: ignore reportOverlappingOverload
-        self,
-        by: TimedeltaIndex,
-        level: IndexLabel | None = ...,
-        as_index: Literal[True] = True,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[Timedelta, Literal[True]]: ...
-    @overload
-    def groupby(
-        self,
-        by: TimedeltaIndex,
-        level: IndexLabel | None = ...,
-        as_index: Literal[False] = False,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[Timedelta, Literal[False]]: ...
-    @overload
-    def groupby(  # pyright: ignore reportOverlappingOverload
-        self,
-        by: PeriodIndex,
-        level: IndexLabel | None = ...,
-        as_index: Literal[True] = True,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[Period, Literal[True]]: ...
-    @overload
-    def groupby(
-        self,
-        by: PeriodIndex,
-        level: IndexLabel | None = ...,
-        as_index: Literal[False] = False,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[Period, Literal[False]]: ...
-    @overload
-    def groupby(  # pyright: ignore reportOverlappingOverload
-        self,
-        by: IntervalIndex[IntervalT],
-        level: IndexLabel | None = ...,
-        as_index: Literal[True] = True,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[IntervalT, Literal[True]]: ...
-    @overload
-    def groupby(
-        self,
-        by: IntervalIndex[IntervalT],
-        level: IndexLabel | None = ...,
-        as_index: Literal[False] = False,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[IntervalT, Literal[False]]: ...
-    @overload
-    def groupby(  # type: ignore[overload-overlap] # pyright: ignore reportOverlappingOverload
-        self,
-        by: MultiIndex | GroupByObjectNonScalar | None = ...,
-        level: IndexLabel | None = ...,
-        as_index: Literal[True] = True,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[tuple[Hashable, ...], Literal[True]]: ...
-    @overload
-    def groupby(  # type: ignore[overload-overlap]
-        self,
-        by: MultiIndex | GroupByObjectNonScalar | None = ...,
-        level: IndexLabel | None = ...,
-        as_index: Literal[False] = False,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[tuple[Hashable, ...], Literal[False]]: ...
-    @overload
-    def groupby(  # pyright: ignore reportOverlappingOverload
-        self,
-        by: Series[SeriesByT],
-        level: IndexLabel | None = ...,
-        as_index: Literal[True] = True,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[SeriesByT, Literal[True]]: ...
-    @overload
-    def groupby(
-        self,
-        by: Series[SeriesByT],
-        level: IndexLabel | None = ...,
-        as_index: Literal[False] = False,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[SeriesByT, Literal[False]]: ...
-    @overload
-    def groupby(
-        self,
-        by: CategoricalIndex | Index | Series,
-        level: IndexLabel | None = ...,
-        as_index: Literal[True] = True,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[Any, Literal[True]]: ...
-    @overload
-    def groupby(
-        self,
-        by: CategoricalIndex | Index | Series,
-        level: IndexLabel | None = ...,
-        as_index: Literal[False] = False,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> DataFrameGroupBy[Any, Literal[False]]: ...
+    # @overload
+    # def groupby(  # pyright: ignore reportOverlappingOverload
+    #     self,
+    #     by: Scalar,
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[True] = True,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[Scalar, Literal[True]]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: Scalar,
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[False] = False,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[Scalar, Literal[False]]: ...
+    # @overload
+    # def groupby(  # pyright: ignore reportOverlappingOverload
+    #     self,
+    #     by: DatetimeIndex,
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[True] = True,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[Timestamp, Literal[True]]: ...
+    # @overload
+    # def groupby(  # pyright: ignore reportOverlappingOverload
+    #     self,
+    #     by: DatetimeIndex,
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[False] = False,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[Timestamp, Literal[False]]: ...
+    # @overload
+    # def groupby(  # pyright: ignore reportOverlappingOverload
+    #     self,
+    #     by: TimedeltaIndex,
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[True] = True,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[Timedelta, Literal[True]]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: TimedeltaIndex,
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[False] = False,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[Timedelta, Literal[False]]: ...
+    # @overload
+    # def groupby(  # pyright: ignore reportOverlappingOverload
+    #     self,
+    #     by: PeriodIndex,
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[True] = True,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[Period, Literal[True]]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: PeriodIndex,
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[False] = False,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[Period, Literal[False]]: ...
+    # @overload
+    # def groupby(  # pyright: ignore reportOverlappingOverload
+    #     self,
+    #     by: IntervalIndex[IntervalT],
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[True] = True,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[IntervalT, Literal[True]]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: IntervalIndex[IntervalT],
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[False] = False,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[IntervalT, Literal[False]]: ...
+    # @overload
+    # def groupby(  # type: ignore[overload-overlap] # pyright: ignore reportOverlappingOverload
+    #     self,
+    #     by: MultiIndex | GroupByObjectNonScalar | None = ...,
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[True] = True,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[tuple[Hashable, ...], Literal[True]]: ...
+    # @overload
+    # def groupby(  # type: ignore[overload-overlap]
+    #     self,
+    #     by: MultiIndex | GroupByObjectNonScalar | None = ...,
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[False] = False,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[tuple[Hashable, ...], Literal[False]]: ...
+    # @overload
+    # def groupby(  # pyright: ignore reportOverlappingOverload
+    #     self,
+    #     by: Series[SeriesByT],
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[True] = True,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[SeriesByT, Literal[True]]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: Series[SeriesByT],
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[False] = False,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[SeriesByT, Literal[False]]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: CategoricalIndex | Index | Series,
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[True] = True,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[Any, Literal[True]]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: CategoricalIndex | Index | Series,
+    #     level: IndexLabel | None = ...,
+    #     as_index: Literal[False] = False,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> DataFrameGroupBy[Any, Literal[False]]: ...
     def pivot(
         self,
         *,
@@ -1373,21 +1348,21 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
         index: IndexLabel = ...,
         values: IndexLabel = ...,
     ) -> Self: ...
-    def pivot_table(
-        self,
-        values: _PivotTableValuesTypes = None,
-        index: _PivotTableIndexTypes = None,
-        columns: _PivotTableColumnsTypes = None,
-        aggfunc: (
-            _PivotAggFunc | Sequence[_PivotAggFunc] | Mapping[Hashable, _PivotAggFunc]
-        ) = "mean",
-        fill_value: Scalar | None = None,
-        margins: _bool = False,
-        dropna: _bool = True,
-        margins_name: _str = "All",
-        observed: _bool = True,
-        sort: _bool = True,
-    ) -> Self: ...
+    # def pivot_table(
+    #     self,
+    #     values: _PivotTableValuesTypes = None,
+    #     index: _PivotTableIndexTypes = None,
+    #     columns: _PivotTableColumnsTypes = None,
+    #     aggfunc: (
+    #         _PivotAggFunc | Sequence[_PivotAggFunc] | Mapping[Hashable, _PivotAggFunc]
+    #     ) = "mean",
+    #     fill_value: Scalar | None = None,
+    #     margins: _bool = False,
+    #     dropna: _bool = True,
+    #     margins_name: _str = "All",
+    #     observed: _bool = True,
+    #     sort: _bool = True,
+    # ) -> Self: ...
     @overload
     def stack(
         self,
@@ -1703,104 +1678,104 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
     def isin(
         self, values: Iterable[Any] | Mapping[Hashable, Iterable[Any]] | DataFrame
     ) -> Self: ...
-    @property
-    def plot(self) -> PlotAccessor: ...
-    def hist(
-        self,
-        by: _str | ListLike | None = None,
-        bins: int | Sequence[int] = 10,
-        *,
-        grid: _bool = True,
-        xlabelsize: float | str | None = None,
-        xrot: float | None = None,
-        ylabelsize: float | str | None = None,
-        yrot: float | None = None,
-        ax: PlotAxes | None = None,
-        sharex: _bool = False,
-        sharey: _bool = False,
-        figsize: tuple[float, float] | None = None,
-        layout: tuple[int, int] | None = None,
-        backend: _str | None = None,
-        legend: bool = False,
-        **kwargs: Any,
-    ) -> npt.NDArray[np.object_]: ...
+    # @property
+    # def plot(self) -> PlotAccessor: ...
+    # def hist(
+    #     self,
+    #     by: _str | ListLike | None = None,
+    #     bins: int | Sequence[int] = 10,
+    #     *,
+    #     grid: _bool = True,
+    #     xlabelsize: float | str | None = None,
+    #     xrot: float | None = None,
+    #     ylabelsize: float | str | None = None,
+    #     yrot: float | None = None,
+    #     ax: PlotAxes | None = None,
+    #     sharex: _bool = False,
+    #     sharey: _bool = False,
+    #     figsize: tuple[float, float] | None = None,
+    #     layout: tuple[int, int] | None = None,
+    #     backend: _str | None = None,
+    #     legend: bool = False,
+    #     **kwargs: Any,
+    # ) -> npt.NDArray[np.object_]: ...
 
     # Keep in sync with `pd.plotting.boxplot`
-    @overload
-    def boxplot(
-        self,
-        by: None = None,
-        ax: PlotAxes | None = None,
-        fontsize: float | _str | None = None,
-        rot: float = 0,
-        grid: _bool = True,
-        figsize: tuple[float, float] | None = None,
-        layout: tuple[int, int] | None = None,
-        *,
-        return_type: Literal["axes"] | None = None,
-        backend: _str | None = None,
-        **kwargs: Any,
-    ) -> PlotAxes: ...
-    @overload
-    def boxplot(
-        self,
-        by: None = None,
-        ax: PlotAxes | None = None,
-        fontsize: float | _str | None = None,
-        rot: float = 0,
-        grid: _bool = True,
-        figsize: tuple[float, float] | None = None,
-        layout: tuple[int, int] | None = None,
-        *,
-        return_type: Literal["dict"],
-        backend: _str | None = None,
-        **kwargs: Any,
-    ) -> dict[str, PlotAxes]: ...
-    @overload
-    def boxplot(
-        self,
-        by: None = None,
-        ax: PlotAxes | None = None,
-        fontsize: float | _str | None = None,
-        rot: float = 0,
-        grid: _bool = True,
-        figsize: tuple[float, float] | None = None,
-        layout: tuple[int, int] | None = None,
-        *,
-        return_type: Literal["both"],
-        backend: _str | None = None,
-        **kwargs: Any,
-    ) -> _BoxPlotT: ...
-    @overload
-    def boxplot(
-        self,
-        by: Hashable | ListLikeHashable,
-        ax: PlotAxes | None = None,
-        fontsize: float | _str | None = None,
-        rot: float = 0,
-        grid: _bool = True,
-        figsize: tuple[float, float] | None = None,
-        layout: tuple[int, int] | None = None,
-        *,
-        return_type: None = None,
-        backend: _str | None = None,
-        **kwargs: Any,
-    ) -> PlotAxes: ...
-    @overload
-    def boxplot(
-        self,
-        by: Hashable | ListLikeHashable,
-        ax: PlotAxes | None = None,
-        fontsize: float | _str | None = None,
-        rot: float = 0,
-        grid: _bool = True,
-        figsize: tuple[float, float] | None = None,
-        layout: tuple[int, int] | None = None,
-        *,
-        return_type: Literal["axes", "dict", "both"],
-        backend: _str | None = None,
-        **kwargs: Any,
-    ) -> Series: ...
+    # @overload
+    # def boxplot(
+    #     self,
+    #     by: None = None,
+    #     ax: PlotAxes | None = None,
+    #     fontsize: float | _str | None = None,
+    #     rot: float = 0,
+    #     grid: _bool = True,
+    #     figsize: tuple[float, float] | None = None,
+    #     layout: tuple[int, int] | None = None,
+    #     *,
+    #     return_type: Literal["axes"] | None = None,
+    #     backend: _str | None = None,
+    #     **kwargs: Any,
+    # ) -> PlotAxes: ...
+    # @overload
+    # def boxplot(
+    #     self,
+    #     by: None = None,
+    #     ax: PlotAxes | None = None,
+    #     fontsize: float | _str | None = None,
+    #     rot: float = 0,
+    #     grid: _bool = True,
+    #     figsize: tuple[float, float] | None = None,
+    #     layout: tuple[int, int] | None = None,
+    #     *,
+    #     return_type: Literal["dict"],
+    #     backend: _str | None = None,
+    #     **kwargs: Any,
+    # ) -> dict[str, PlotAxes]: ...
+    # @overload
+    # def boxplot(
+    #     self,
+    #     by: None = None,
+    #     ax: PlotAxes | None = None,
+    #     fontsize: float | _str | None = None,
+    #     rot: float = 0,
+    #     grid: _bool = True,
+    #     figsize: tuple[float, float] | None = None,
+    #     layout: tuple[int, int] | None = None,
+    #     *,
+    #     return_type: Literal["both"],
+    #     backend: _str | None = None,
+    #     **kwargs: Any,
+    # ) -> _BoxPlotT: ...
+    # @overload
+    # def boxplot(
+    #     self,
+    #     by: Hashable | ListLikeHashable,
+    #     ax: PlotAxes | None = None,
+    #     fontsize: float | _str | None = None,
+    #     rot: float = 0,
+    #     grid: _bool = True,
+    #     figsize: tuple[float, float] | None = None,
+    #     layout: tuple[int, int] | None = None,
+    #     *,
+    #     return_type: None = None,
+    #     backend: _str | None = None,
+    #     **kwargs: Any,
+    # ) -> PlotAxes: ...
+    # @overload
+    # def boxplot(
+    #     self,
+    #     by: Hashable | ListLikeHashable,
+    #     ax: PlotAxes | None = None,
+    #     fontsize: float | _str | None = None,
+    #     rot: float = 0,
+    #     grid: _bool = True,
+    #     figsize: tuple[float, float] | None = None,
+    #     layout: tuple[int, int] | None = None,
+    #     *,
+    #     return_type: Literal["axes", "dict", "both"],
+    #     backend: _str | None = None,
+    #     **kwargs: Any,
+    # ) -> Series: ...
 
     sparse = ...
 
@@ -2532,7 +2507,7 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
         **kwargs: Any,
     ) -> Series: ...
     # Not actually positional, but used to handle removal of deprecated
-    def set_axis(self, labels: AxesData, *, axis: Axis = 0) -> Self: ...
+    # def set_axis(self, labels: AxesData, *, axis: Axis = 0) -> Self: ...
     def skew(
         self,
         axis: Axis | None = ...,
@@ -2761,8 +2736,12 @@ class DataFrame(NDFrame, OpsMixin, _GetItemHack):
     def __rfloordiv__(
         self, other: float | DataFrame | Series[int] | Series[float] | Sequence[float]
     ) -> Self: ...
-    def __truediv__(self, other: float | DataFrame | Series | Sequence) -> Self: ...
-    def __rtruediv__(self, other: float | DataFrame | Series | Sequence) -> Self: ...
+    def __truediv__(
+        self, other: float | DataFrame | Series | Sequence[Any]
+    ) -> Self: ...
+    def __rtruediv__(
+        self, other: float | DataFrame | Series | Sequence[Any]
+    ) -> Self: ...
     @final
     def __bool__(self) -> NoReturn: ...
 

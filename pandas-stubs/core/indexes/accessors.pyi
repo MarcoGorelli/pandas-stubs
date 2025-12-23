@@ -5,6 +5,7 @@ from datetime import (
     tzinfo as _tzinfo,
 )
 from typing import (
+    Any,
     Generic,
     Literal,
     TypeVar,
@@ -310,7 +311,7 @@ class _TimedeltaPropertiesNoRounding(
 ):
     def to_pytimedelta(self) -> np_1darray_object: ...
     @property
-    def components(self) -> DataFrame: ...
+    def components(self) -> Any: ...
     @property
     def days(self) -> _TDNoRoundingMethodReturnType: ...
     @property

@@ -23,10 +23,8 @@ from pandas.core.frame import DataFrame
 from pandas.core.groupby.base import TransformReductionListType
 from pandas.core.groupby.groupby import (
     GroupBy,
-    GroupByPlot,
 )
 from pandas.core.series import Series
-from typing_extensions import Self
 
 from pandas._libs.tslibs.timestamps import Timestamp
 from pandas._typing import (
@@ -162,8 +160,8 @@ class SeriesGroupBy(GroupBy[Series[S2]], Generic[S2, ByT]):
         numeric_only: bool = False,
         **kwargs: Any,
     ) -> Series: ...
-    @property
-    def plot(self) -> GroupByPlot[Self]: ...
+    # @property
+    # def plot(self) -> GroupByPlot[Self]: ...
     def nlargest(
         self, n: int = 5, keep: NsmallestNlargestKeep = "first"
     ) -> Series[S2]: ...
@@ -423,8 +421,8 @@ class DataFrameGroupBy(GroupBy[DataFrame], Generic[ByT, _TT]):
         level: None = None,
         **kwargs: Any,
     ) -> Series: ...
-    @property
-    def plot(self) -> GroupByPlot[Self]: ...
+    # @property
+    # def plot(self) -> GroupByPlot[Self]: ...
     def corr(
         self,
         method: str | Callable[[np_ndarray, np_ndarray], float] = ...,

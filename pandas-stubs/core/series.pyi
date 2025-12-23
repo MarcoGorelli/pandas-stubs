@@ -7,12 +7,10 @@ from collections.abc import (
     Hashable,
     Iterable,
     Iterator,
-    KeysView,
     Mapping,
     MutableMapping,
     Sequence,
     Set as AbstractSet,
-    ValuesView,
 )
 from datetime import (
     date,
@@ -51,7 +49,6 @@ import numpy as np
 from pandas import (
     Index,
     Period,
-    PeriodDtype,
     Timedelta,
     Timestamp,
 )
@@ -62,13 +59,11 @@ from pandas.core.api import (
     Int64Dtype as Int64Dtype,
 )
 from pandas.core.arrays.base import ExtensionArray
-from pandas.core.arrays.boolean import BooleanDtype
 from pandas.core.arrays.categorical import (
     Categorical,
     CategoricalAccessor,
 )
 from pandas.core.arrays.datetimes import DatetimeArray
-from pandas.core.arrays.floating import FloatingArray
 from pandas.core.arrays.timedeltas import TimedeltaArray
 from pandas.core.base import (
     T_INTERVAL_NP,
@@ -96,14 +91,8 @@ from pandas.core.base import (
 )
 from pandas.core.frame import DataFrame
 from pandas.core.generic import NDFrame
-from pandas.core.groupby.generic import SeriesGroupBy
-from pandas.core.groupby.groupby import BaseGroupBy
 from pandas.core.indexers import BaseIndexer
-from pandas.core.indexes.accessors import DtDescriptor
-from pandas.core.indexes.category import CategoricalIndex
 from pandas.core.indexes.datetimes import DatetimeIndex
-from pandas.core.indexes.interval import IntervalIndex
-from pandas.core.indexes.multi import MultiIndex
 from pandas.core.indexes.period import PeriodIndex
 from pandas.core.indexes.timedeltas import TimedeltaIndex
 from pandas.core.indexing import (
@@ -130,12 +119,9 @@ import xarray as xr
 
 from pandas._libs.interval import (
     Interval,
-    _OrderableT,
 )
-from pandas._libs.lib import _NoDefaultDoNotUse
 from pandas._libs.missing import NAType
 from pandas._libs.tslibs import BaseOffset
-from pandas._libs.tslibs.nattype import NaTType
 from pandas._typing import (
     S1,
     S2,
@@ -148,7 +134,6 @@ from pandas._typing import (
     AnyArrayLike,
     ArrayLike,
     Axes,
-    AxesData,
     Axis,
     AxisColumn,
     AxisIndex,
@@ -159,7 +144,6 @@ from pandas._typing import (
     ComplexDtypeArg,
     CompressionOptions,
     DropKeep,
-    Dtype,
     DTypeLike,
     DtypeObj,
     FilePath,
@@ -168,8 +152,6 @@ from pandas._typing import (
     FloatFormatType,
     Frequency,
     GenericT,
-    GroupByObjectNonScalar,
-    HashableT1,
     IgnoreRaise,
     IndexingInt,
     IndexKeyFunc,
@@ -177,7 +159,6 @@ from pandas._typing import (
     IntDtypeArg,
     InterpolateOptions,
     IntervalClosedType,
-    IntervalT,
     JoinHow,
     JSONSerializable,
     JsonSeriesOrient,
@@ -200,13 +181,11 @@ from pandas._typing import (
     RandomState,
     ReindexMethod,
     Renamer,
-    ReplaceValue,
     S2_contra,
     S2_NDT_contra,
     Scalar,
     ScalarT,
     SequenceNotStr,
-    SeriesByT,
     SortKind,
     StrDtypeArg,
     StrLike,
@@ -249,8 +228,6 @@ from pandas._typing import (
 
 from pandas.core.dtypes.base import ExtensionDtype
 from pandas.core.dtypes.dtypes import CategoricalDtype
-
-from pandas.plotting import PlotAccessor
 
 @type_check_only
 class _SupportsAdd(Protocol[_T_co]):
@@ -343,207 +320,207 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
     __index__: ClassVar[None]
     __hash__: ClassVar[None]  # pyright: ignore[reportIncompatibleMethodOverride]
 
-    @overload
-    def __new__(
-        cls,
-        data: Sequence[Never],
-        index: AxesData | None = None,
-        dtype: None = None,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series: ...
-    @overload
-    def __new__(
-        cls,
-        data: Sequence[list[_str]],
-        index: AxesData | None = None,
-        dtype: None = None,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[list[_str]]: ...
-    @overload
-    def __new__(
-        cls,
-        data: Sequence[_str],
-        index: AxesData | None = None,
-        dtype: Dtype | None = None,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[_str]: ...
-    @overload
-    def __new__(
-        cls,
-        data: (
-            DatetimeIndex
-            | Sequence[np.datetime64 | datetime | date]
-            | dict[HashableT1, np.datetime64 | datetime | date]
-            | np.datetime64
-            | datetime
-            | date
-        ),
-        index: AxesData | None = None,
-        dtype: TimestampDtypeArg = ...,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[Timestamp]: ...
-    @overload
-    def __new__(
-        cls,
-        data: Sequence[datetime | np.timedelta64] | np_ndarray_dt | DatetimeArray,
-        index: AxesData | None = None,
-        *,
-        dtype: TimestampDtypeArg,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[Timestamp]: ...
-    @overload
-    def __new__(
-        cls,
-        data: _DataLike,
-        index: AxesData | None = None,
-        *,
-        dtype: CategoryDtypeArg,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[CategoricalDtype]: ...
-    @overload
-    def __new__(
-        cls,
-        data: PeriodIndex | Sequence[Period],
-        index: AxesData | None = None,
-        dtype: PeriodDtype = ...,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[Period]: ...
-    @overload
-    def __new__(
-        cls,
-        data: Sequence[BaseOffset],
-        index: AxesData | None = None,
-        dtype: PeriodDtype = ...,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[BaseOffset]: ...
-    @overload
-    def __new__(
-        cls,
-        data: (
-            TimedeltaIndex
-            | Sequence[np.timedelta64 | timedelta]
-            | dict[HashableT1, np.timedelta64 | timedelta]
-            | np.timedelta64
-            | timedelta
-        ),
-        index: AxesData | None = None,
-        dtype: TimedeltaDtypeArg = ...,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[Timedelta]: ...
-    @overload
-    def __new__(
-        cls,
-        data: (
-            IntervalIndex[Interval[_OrderableT]]
-            | Interval[_OrderableT]
-            | Sequence[Interval[_OrderableT]]
-            | dict[HashableT1, Interval[_OrderableT]]
-        ),
-        index: AxesData | None = None,
-        dtype: Literal["Interval"] = ...,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[Interval[_OrderableT]]: ...
-    @overload
-    def __new__(  # type: ignore[overload-overlap] # pyright: ignore[reportOverlappingOverload]
-        cls,
-        data: Scalar | _DataLike | dict[HashableT1, Any] | None,
-        index: AxesData | None = None,
-        *,
-        dtype: type[S1],
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Self: ...
-    @overload
-    def __new__(  # pyright: ignore[reportOverlappingOverload]
-        cls,
-        data: Sequence[bool | np.bool],
-        index: AxesData | None = None,
-        dtype: BooleanDtypeArg | None = None,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[bool]: ...
-    @overload
-    def __new__(
-        cls,
-        data: Sequence[int | np.integer],
-        index: AxesData | None = None,
-        dtype: IntDtypeArg | UIntDtypeArg | None = None,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[int]: ...
-    @overload
-    def __new__(
-        cls,
-        data: Sequence[float | np.floating] | np_ndarray_float | FloatingArray,
-        index: AxesData | None = None,
-        dtype: None = None,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[float]: ...
-    @overload
-    def __new__(
-        cls,
-        data: AxesData,
-        index: None = None,
-        *,
-        dtype: FloatDtypeArg,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[float]: ...
-    @overload
-    def __new__(
-        cls,
-        data: AxesData,
-        index: AxesData,
-        dtype: FloatDtypeArg,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series[float]: ...
-    @overload
-    def __new__(
-        cls,
-        data: (
-            S1
-            | ArrayLike
-            | dict[_str, np_ndarray]
-            | Sequence[S1]
-            | IndexOpsMixin[S1]
-            | dict[HashableT1, S1]
-            | KeysView[S1]
-            | ValuesView[S1]
-        ),
-        index: AxesData | None = None,
-        dtype: Dtype | None = None,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Self: ...
-    @overload
-    def __new__(
-        cls,
-        data: (
-            Scalar
-            | _DataLike
-            | Mapping[HashableT1, Any]
-            | BaseGroupBy
-            | NaTType
-            | NAType
-            | None
-        ) = None,
-        index: AxesData | None = None,
-        dtype: Dtype | None = None,
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Series: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: Sequence[Never],
+    #     index: AxesData | None = None,
+    #     dtype: None = None,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: Sequence[list[_str]],
+    #     index: AxesData | None = None,
+    #     dtype: None = None,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[list[_str]]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: Sequence[_str],
+    #     index: AxesData | None = None,
+    #     dtype: Dtype | None = None,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[_str]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: (
+    #         DatetimeIndex
+    #         | Sequence[np.datetime64 | datetime | date]
+    #         | dict[HashableT1, np.datetime64 | datetime | date]
+    #         | np.datetime64
+    #         | datetime
+    #         | date
+    #     ),
+    #     index: AxesData | None = None,
+    #     dtype: TimestampDtypeArg = ...,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[Timestamp]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: Sequence[datetime | np.timedelta64] | np_ndarray_dt | DatetimeArray,
+    #     index: AxesData | None = None,
+    #     *,
+    #     dtype: TimestampDtypeArg,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[Timestamp]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: _DataLike,
+    #     index: AxesData | None = None,
+    #     *,
+    #     dtype: CategoryDtypeArg,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[CategoricalDtype]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: PeriodIndex | Sequence[Period],
+    #     index: AxesData | None = None,
+    #     dtype: PeriodDtype = ...,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[Period]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: Sequence[BaseOffset],
+    #     index: AxesData | None = None,
+    #     dtype: PeriodDtype = ...,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[BaseOffset]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: (
+    #         TimedeltaIndex
+    #         | Sequence[np.timedelta64 | timedelta]
+    #         | dict[HashableT1, np.timedelta64 | timedelta]
+    #         | np.timedelta64
+    #         | timedelta
+    #     ),
+    #     index: AxesData | None = None,
+    #     dtype: TimedeltaDtypeArg = ...,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[Timedelta]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: (
+    #         IntervalIndex[Interval[_OrderableT]]
+    #         | Interval[_OrderableT]
+    #         | Sequence[Interval[_OrderableT]]
+    #         | dict[HashableT1, Interval[_OrderableT]]
+    #     ),
+    #     index: AxesData | None = None,
+    #     dtype: Literal["Interval"] = ...,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[Interval[_OrderableT]]: ...
+    # @overload
+    # def __new__(  # type: ignore[overload-overlap] # pyright: ignore[reportOverlappingOverload]
+    #     cls,
+    #     data: Scalar | _DataLike | dict[HashableT1, Any] | None,
+    #     index: AxesData | None = None,
+    #     *,
+    #     dtype: type[S1],
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Self: ...
+    # @overload
+    # def __new__(  # pyright: ignore[reportOverlappingOverload]
+    #     cls,
+    #     data: Sequence[bool | np.bool],
+    #     index: AxesData | None = None,
+    #     dtype: BooleanDtypeArg | None = None,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[bool]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: Sequence[int | np.integer],
+    #     index: AxesData | None = None,
+    #     dtype: IntDtypeArg | UIntDtypeArg | None = None,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[int]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: Sequence[float | np.floating] | np_ndarray_float | FloatingArray,
+    #     index: AxesData | None = None,
+    #     dtype: None = None,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[float]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: AxesData,
+    #     index: None = None,
+    #     *,
+    #     dtype: FloatDtypeArg,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[float]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: AxesData,
+    #     index: AxesData,
+    #     dtype: FloatDtypeArg,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series[float]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: (
+    #         S1
+    #         | ArrayLike
+    #         | dict[_str, np_ndarray]
+    #         | Sequence[S1]
+    #         | IndexOpsMixin[S1]
+    #         | dict[HashableT1, S1]
+    #         | KeysView[S1]
+    #         | ValuesView[S1]
+    #     ),
+    #     index: AxesData | None = None,
+    #     dtype: Dtype | None = None,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Self: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: (
+    #         Scalar
+    #         | _DataLike
+    #         | Mapping[HashableT1, Any]
+    #         | BaseGroupBy
+    #         | NaTType
+    #         | NAType
+    #         | None
+    #     ) = None,
+    #     index: AxesData | None = None,
+    #     dtype: Dtype | None = None,
+    #     name: Hashable = None,
+    #     copy: bool | None = None,
+    # ) -> Series: ...
     @property
     def hasnans(self) -> bool: ...
     @property
@@ -785,117 +762,117 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         self, *, into: type[MutableMapping[Any, Any]] | MutableMapping[Any, Any]
     ) -> MutableMapping[Hashable, S1]: ...
     def to_frame(self, name: object | None = ...) -> DataFrame: ...
-    @overload
-    def groupby(
-        self,
-        by: Scalar,
-        level: IndexLabel | None = ...,
-        as_index: _bool = ...,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> SeriesGroupBy[S1, Scalar]: ...
-    @overload
-    def groupby(
-        self,
-        by: DatetimeIndex,
-        level: IndexLabel | None = ...,
-        as_index: _bool = ...,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> SeriesGroupBy[S1, Timestamp]: ...
-    @overload
-    def groupby(
-        self,
-        by: TimedeltaIndex,
-        level: IndexLabel | None = ...,
-        as_index: _bool = ...,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> SeriesGroupBy[S1, Timedelta]: ...
-    @overload
-    def groupby(
-        self,
-        by: PeriodIndex,
-        level: IndexLabel | None = ...,
-        as_index: _bool = ...,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> SeriesGroupBy[S1, Period]: ...
-    @overload
-    def groupby(
-        self,
-        by: IntervalIndex[IntervalT],
-        level: IndexLabel | None = ...,
-        as_index: _bool = ...,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> SeriesGroupBy[S1, IntervalT]: ...
-    @overload
-    def groupby(
-        self,
-        by: MultiIndex | GroupByObjectNonScalar,
-        level: IndexLabel | None = ...,
-        as_index: _bool = ...,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> SeriesGroupBy[S1, tuple[Hashable, ...]]: ...
-    @overload
-    def groupby(
-        self,
-        by: None,
-        level: IndexLabel,  # level is required when by=None (passed as positional)
-        as_index: _bool = ...,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> SeriesGroupBy[S1, Scalar]: ...
-    @overload
-    def groupby(
-        self,
-        by: None = None,
-        *,
-        level: IndexLabel,  # level is required when by=None (passed as keyword)
-        as_index: _bool = ...,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> SeriesGroupBy[S1, Scalar]: ...
-    @overload
-    def groupby(
-        self,
-        by: Series[SeriesByT],
-        level: IndexLabel | None = ...,
-        as_index: _bool = ...,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> SeriesGroupBy[S1, SeriesByT]: ...
-    @overload
-    def groupby(
-        self,
-        by: CategoricalIndex | Index | Series,
-        level: IndexLabel | None = ...,
-        as_index: _bool = ...,
-        sort: _bool = ...,
-        group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
-        dropna: _bool = ...,
-    ) -> SeriesGroupBy[S1, Any]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: Scalar,
+    #     level: IndexLabel | None = ...,
+    #     as_index: _bool = ...,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> SeriesGroupBy[S1, Scalar]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: DatetimeIndex,
+    #     level: IndexLabel | None = ...,
+    #     as_index: _bool = ...,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> SeriesGroupBy[S1, Timestamp]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: TimedeltaIndex,
+    #     level: IndexLabel | None = ...,
+    #     as_index: _bool = ...,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> SeriesGroupBy[S1, Timedelta]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: PeriodIndex,
+    #     level: IndexLabel | None = ...,
+    #     as_index: _bool = ...,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> SeriesGroupBy[S1, Period]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: IntervalIndex[IntervalT],
+    #     level: IndexLabel | None = ...,
+    #     as_index: _bool = ...,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> SeriesGroupBy[S1, IntervalT]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: MultiIndex | GroupByObjectNonScalar,
+    #     level: IndexLabel | None = ...,
+    #     as_index: _bool = ...,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> SeriesGroupBy[S1, tuple[Hashable, ...]]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: None,
+    #     level: IndexLabel,  # level is required when by=None (passed as positional)
+    #     as_index: _bool = ...,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> SeriesGroupBy[S1, Scalar]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: None = None,
+    #     *,
+    #     level: IndexLabel,  # level is required when by=None (passed as keyword)
+    #     as_index: _bool = ...,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> SeriesGroupBy[S1, Scalar]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: Series[SeriesByT],
+    #     level: IndexLabel | None = ...,
+    #     as_index: _bool = ...,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> SeriesGroupBy[S1, SeriesByT]: ...
+    # @overload
+    # def groupby(
+    #     self,
+    #     by: CategoricalIndex | Index | Series,
+    #     level: IndexLabel | None = ...,
+    #     as_index: _bool = ...,
+    #     sort: _bool = ...,
+    #     group_keys: _bool = ...,
+    #     observed: _bool | _NoDefaultDoNotUse = ...,
+    #     dropna: _bool = ...,
+    # ) -> SeriesGroupBy[S1, Any]: ...
     def count(self) -> int: ...
     def mode(self, dropna: bool = True) -> Series[S1]: ...
     @overload
@@ -959,22 +936,22 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
     def cov(
         self, other: Series[S1], min_periods: int | None = None, ddof: int = 1
     ) -> float: ...
-    @overload
-    def diff(  # type: ignore[overload-overlap]
-        self: Series[Never] | Series[int], periods: int = ...
-    ) -> Series[float]: ...
-    @overload
-    def diff(self: Series[_bool], periods: int = ...) -> Series: ...
-    @overload
-    def diff(
-        self: Series[BooleanDtype], periods: int = ...
-    ) -> Series[BooleanDtype]: ...
-    @overload
-    def diff(self: Series[Interval], periods: int = ...) -> Never: ...
-    @overload
-    def diff(
-        self: SupportsGetItem[Scalar, SupportsSelfSub[S2]], periods: int = ...
-    ) -> Series[S2]: ...
+    # @overload
+    # def diff(  # type: ignore[overload-overlap]
+    #     self: Series[Never] | Series[int], periods: int = ...
+    # ) -> Series[float]: ...
+    # @overload
+    # def diff(self: Series[_bool], periods: int = ...) -> Series: ...
+    # @overload
+    # def diff(
+    #     self: Series[BooleanDtype], periods: int = ...
+    # ) -> Series[BooleanDtype]: ...
+    # @overload
+    # def diff(self: Series[Interval], periods: int = ...) -> Never: ...
+    # @overload
+    # def diff(
+    #     self: SupportsGetItem[Scalar, SupportsSelfSub[S2]], periods: int = ...
+    # ) -> Series[S2]: ...
     def autocorr(self, lag: int = 1) -> float: ...
     @overload
     def dot(self, other: Series[S1]) -> Scalar: ...
@@ -1285,25 +1262,25 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         limit: int | None = ...,
         inplace: Literal[False] = False,
     ) -> Series[S1]: ...
-    @overload
-    def replace(
-        self,
-        to_replace: ReplaceValue = ...,
-        value: ReplaceValue = ...,
-        *,
-        regex: ReplaceValue = ...,
-        inplace: Literal[True],
-        # TODO: pandas-dev/pandas#63195 return Self after Pandas 3.0
-    ) -> None: ...
-    @overload
-    def replace(
-        self,
-        to_replace: ReplaceValue = ...,
-        value: ReplaceValue = ...,
-        *,
-        regex: ReplaceValue = ...,
-        inplace: Literal[False] = False,
-    ) -> Series[S1]: ...
+    # @overload
+    # def replace(
+    #     self,
+    #     to_replace: ReplaceValue = ...,
+    #     value: ReplaceValue = ...,
+    #     *,
+    #     regex: ReplaceValue = ...,
+    #     inplace: Literal[True],
+    #     # TODO: pandas-dev/pandas#63195 return Self after Pandas 3.0
+    # ) -> None: ...
+    # @overload
+    # def replace(
+    #     self,
+    #     to_replace: ReplaceValue = ...,
+    #     value: ReplaceValue = ...,
+    #     *,
+    #     regex: ReplaceValue = ...,
+    #     inplace: Literal[False] = False,
+    # ) -> Series[S1]: ...
     def shift(
         self,
         periods: int | Sequence[int] = ...,
@@ -1370,9 +1347,9 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         Series[_str],
         Series,
     ]: ...
-    dt = DtDescriptor()
-    @property
-    def plot(self) -> PlotAccessor: ...
+    # dt = DtDescriptor()
+    # @property
+    # def plot(self) -> PlotAccessor: ...
     sparse = ...
     def hist(
         self,
@@ -4549,7 +4526,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
     ) -> np_1darray: ...
     @overload
     def to_numpy(
-        self: Series[Interval],
+        self: Series[Interval[Any]],
         dtype: type[np.object_] | None = None,
         copy: bool = False,
         na_value: Scalar = ...,
@@ -4557,7 +4534,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
     ) -> np_1darray_object: ...
     @overload
     def to_numpy(
-        self: Series[Interval],
+        self: Series[Interval[Any]],
         dtype: type[T_INTERVAL_NP],
         copy: bool = False,
         na_value: Scalar = ...,
@@ -4710,13 +4687,13 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         copy: _bool = ...,
         inplace: Literal[False] = False,
     ) -> Self: ...
-    def set_axis(
-        self,
-        labels: AxesData,
-        *,
-        axis: Axis = 0,
-        copy: _bool | _NoDefaultDoNotUse = ...,
-    ) -> Self: ...
+    # def set_axis(
+    #     self,
+    #     labels: AxesData,
+    #     *,
+    #     axis: Axis = 0,
+    #     copy: _bool | _NoDefaultDoNotUse = ...,
+    # ) -> Self: ...
     @final
     def xs(  # pyright: ignore[reportIncompatibleMethodOverride] # pyrefly: ignore[bad-override] # ty: ignore[invalid-method-override]
         self,

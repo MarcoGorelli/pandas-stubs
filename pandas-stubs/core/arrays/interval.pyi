@@ -28,7 +28,7 @@ from pandas._typing import (
     np_ndarray,
 )
 
-IntervalOrNA: TypeAlias = Interval | float
+IntervalOrNA: TypeAlias = Interval[Any] | float
 
 class IntervalArray(IntervalMixin, ExtensionArray):
     can_hold_na: bool = ...
@@ -82,7 +82,7 @@ class IntervalArray(IntervalMixin, ExtensionArray):
         indices: TakeIndexer,
         *,
         allow_fill: bool = ...,
-        fill_value: Interval | None = None,
+        fill_value: Interval[Any] | None = None,
         axis: Axis | None = None,
         **kwargs: Any,
     ) -> Self: ...
@@ -104,4 +104,4 @@ class IntervalArray(IntervalMixin, ExtensionArray):
     def contains(
         self, other: Scalar | ExtensionArray | Index | np_ndarray
     ) -> np_1darray_bool: ...
-    def overlaps(self, other: Interval) -> bool: ...
+    def overlaps(self, other: Interval[Any]) -> bool: ...

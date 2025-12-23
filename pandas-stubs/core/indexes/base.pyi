@@ -6,7 +6,6 @@ from collections.abc import (
     Sequence,
 )
 from datetime import (
-    datetime,
     timedelta,
 )
 from pathlib import Path
@@ -30,8 +29,6 @@ from _typeshed import (
     _T_contra,
 )
 import numpy as np
-from pandas.core.arrays.boolean import BooleanArray
-from pandas.core.arrays.floating import FloatingArray
 from pandas.core.base import (
     T_INTERVAL_NP,
     ArrayIndexTimedeltaNoSeq,
@@ -54,15 +51,10 @@ from pandas.core.base import (
     Supports_ProtoRTrueDiv,
     Supports_ProtoTrueDiv,
 )
-from pandas.core.frame import DataFrame
-from pandas.core.indexes.category import CategoricalIndex
 from pandas.core.indexes.datetimes import DatetimeIndex
-from pandas.core.indexes.interval import IntervalIndex
-from pandas.core.indexes.multi import MultiIndex
 from pandas.core.indexes.period import PeriodIndex
 from pandas.core.indexes.timedeltas import TimedeltaIndex
 from pandas.core.series import Series
-from pandas.core.strings.accessor import StringMethods
 from typing_extensions import (
     Never,
     Self,
@@ -70,7 +62,6 @@ from typing_extensions import (
 
 from pandas._libs.interval import (
     Interval,
-    _OrderableT,
 )
 from pandas._libs.tslibs.period import Period
 from pandas._libs.tslibs.timedeltas import Timedelta
@@ -84,12 +75,9 @@ from pandas._typing import (
     AnyArrayLike,
     AnyArrayLikeInt,
     ArrayLike,
-    AxesData,
     Axis,
     BuiltinFloatDtypeArg,
-    CategoryDtypeArg,
     DropKeep,
-    Dtype,
     DtypeArg,
     DTypeLike,
     DtypeObj,
@@ -119,8 +107,6 @@ from pandas._typing import (
     SliceType,
     SupportsDType,
     TakeIndexer,
-    TimedeltaDtypeArg,
-    TimestampDtypeArg,
     np_1darray,
     np_1darray_bool,
     np_1darray_intp,
@@ -132,10 +118,7 @@ from pandas._typing import (
     np_ndarray_float,
     np_ndarray_str,
     np_ndarray_td,
-    type_t,
 )
-
-from pandas.core.dtypes.dtypes import PeriodDtype
 
 FloatNotNumpy16DtypeArg: TypeAlias = (
     BuiltinFloatDtypeArg
@@ -149,226 +132,226 @@ class InvalidIndexError(Exception): ...
 class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
     __hash__: ClassVar[None]  # type: ignore[assignment] # pyright: ignore[reportIncompatibleMethodOverride]
     # overloads with additional dtypes
-    @overload
-    def __new__(  # pyright: ignore[reportOverlappingOverload]
-        cls,
-        data: Sequence[bool | np.bool_] | IndexOpsMixin[bool] | np_ndarray_bool,
-        *,
-        dtype: Literal["bool"] | type_t[bool | np.bool_] = ...,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> Index[bool]: ...
-    @overload
-    def __new__(
-        cls,
-        data: Sequence[int | np.integer] | IndexOpsMixin[int] | np_ndarray_anyint,
-        *,
-        dtype: Literal["int"] | type_t[int | np.integer] = ...,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> Index[int]: ...
-    @overload
-    def __new__(
-        cls,
-        data: AxesData,
-        *,
-        dtype: Literal["int"] | type_t[int | np.integer],
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> Index[int]: ...
-    @overload
-    def __new__(
-        cls,
-        data: Sequence[float | np.floating] | np_ndarray_float | FloatingArray,
-        dtype: None = None,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> Index[float]: ...
-    @overload
-    def __new__(
-        cls,
-        data: AxesData,
-        dtype: FloatNotNumpy16DtypeArg,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> Index[float]: ...
-    @overload
-    def __new__(
-        cls,
-        data: (
-            Sequence[complex | np.complexfloating]
-            | IndexOpsMixin[complex]
-            | np_ndarray_complex
-        ),
-        *,
-        dtype: Literal["complex"] | type_t[complex | np.complexfloating] = ...,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> Index[complex]: ...
-    @overload
-    def __new__(
-        cls,
-        data: AxesData,
-        *,
-        dtype: Literal["complex"] | type_t[complex | np.complexfloating],
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> Index[complex]: ...
-    # special overloads with dedicated Index-subclasses
-    @overload
-    def __new__(
-        cls,
-        data: (
-            Sequence[np.datetime64 | datetime] | IndexOpsMixin[datetime] | DatetimeIndex
-        ),
-        *,
-        dtype: TimestampDtypeArg = ...,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> DatetimeIndex: ...
-    @overload
-    def __new__(
-        cls,
-        data: AxesData,
-        *,
-        dtype: TimestampDtypeArg,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> DatetimeIndex: ...
-    @overload
-    def __new__(
-        cls,
-        data: Sequence[Period] | IndexOpsMixin[Period],
-        *,
-        dtype: PeriodDtype = ...,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> PeriodIndex: ...
-    @overload
-    def __new__(
-        cls,
-        data: AxesData,
-        *,
-        dtype: PeriodDtype,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> PeriodIndex: ...
-    @overload
-    def __new__(
-        cls,
-        data: Sequence[np.timedelta64 | timedelta] | IndexOpsMixin[timedelta],
-        *,
-        dtype: TimedeltaDtypeArg = ...,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> TimedeltaIndex: ...
-    @overload
-    def __new__(
-        cls,
-        data: AxesData,
-        *,
-        dtype: TimedeltaDtypeArg,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> TimedeltaIndex: ...
-    @overload
-    def __new__(
-        cls,
-        data: AxesData,
-        *,
-        dtype: CategoryDtypeArg,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> CategoricalIndex: ...
-    @overload
-    def __new__(
-        cls,
-        data: Sequence[Interval[_OrderableT]] | IndexOpsMixin[Interval[_OrderableT]],
-        *,
-        dtype: Literal["Interval"] = ...,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> IntervalIndex[Interval[_OrderableT]]: ...
-    @overload
-    def __new__(
-        cls,
-        data: AxesData,
-        *,
-        dtype: Literal["Interval"],
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> IntervalIndex[Interval[Any]]: ...
-    @overload
-    def __new__(
-        cls,
-        data: DatetimeIndex,
-        *,
-        dtype: TimestampDtypeArg | None = ...,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> DatetimeIndex: ...
-    # generic overloads
-    @overload
-    def __new__(
-        cls,
-        data: Iterable[S1] | IndexOpsMixin[S1],
-        *,
-        dtype: type[S1] = ...,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> Self: ...
-    @overload
-    def __new__(
-        cls,
-        data: AxesData = ...,
-        *,
-        dtype: type[S1],
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> Self: ...
-    # fallback overload
-    @overload
-    def __new__(
-        cls,
-        data: AxesData,
-        *,
-        dtype: Dtype = ...,
-        copy: bool = ...,
-        name: Hashable = ...,
-        tupleize_cols: bool = ...,
-    ) -> Self: ...
-    @property
-    def str(
-        self,
-    ) -> StringMethods[  # pyrefly: ignore[bad-specialization]
-        Self,
-        MultiIndex,
-        np_1darray_bool,
-        Index[list[_str]],
-        Index[int],
-        Index[bytes],
-        Index[_str],
-        Index,
-    ]: ...
+    # @overload
+    # def __new__(  # pyright: ignore[reportOverlappingOverload]
+    #     cls,
+    #     data: Sequence[bool | np.bool_] | IndexOpsMixin[bool] | np_ndarray_bool,
+    #     *,
+    #     dtype: Literal["bool"] | type_t[bool | np.bool_] = ...,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> Index[bool]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: Sequence[int | np.integer] | IndexOpsMixin[int] | np_ndarray_anyint,
+    #     *,
+    #     dtype: Literal["int"] | type_t[int | np.integer] = ...,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> Index[int]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: AxesData,
+    #     *,
+    #     dtype: Literal["int"] | type_t[int | np.integer],
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> Index[int]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: Sequence[float | np.floating] | np_ndarray_float | FloatingArray,
+    #     dtype: None = None,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> Index[float]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: AxesData,
+    #     dtype: FloatNotNumpy16DtypeArg,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> Index[float]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: (
+    #         Sequence[complex | np.complexfloating]
+    #         | IndexOpsMixin[complex]
+    #         | np_ndarray_complex
+    #     ),
+    #     *,
+    #     dtype: Literal["complex"] | type_t[complex | np.complexfloating] = ...,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> Index[complex]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: AxesData,
+    #     *,
+    #     dtype: Literal["complex"] | type_t[complex | np.complexfloating],
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> Index[complex]: ...
+    # # special overloads with dedicated Index-subclasses
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: (
+    #         Sequence[np.datetime64 | datetime] | IndexOpsMixin[datetime] | DatetimeIndex
+    #     ),
+    #     *,
+    #     dtype: TimestampDtypeArg = ...,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> DatetimeIndex: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: AxesData,
+    #     *,
+    #     dtype: TimestampDtypeArg,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> DatetimeIndex: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: Sequence[Period] | IndexOpsMixin[Period],
+    #     *,
+    #     dtype: PeriodDtype = ...,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> PeriodIndex: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: AxesData,
+    #     *,
+    #     dtype: PeriodDtype,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> PeriodIndex: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: Sequence[np.timedelta64 | timedelta] | IndexOpsMixin[timedelta],
+    #     *,
+    #     dtype: TimedeltaDtypeArg = ...,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> TimedeltaIndex: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: AxesData,
+    #     *,
+    #     dtype: TimedeltaDtypeArg,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> TimedeltaIndex: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: AxesData,
+    #     *,
+    #     dtype: CategoryDtypeArg,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> CategoricalIndex: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: Sequence[Interval[_OrderableT]] | IndexOpsMixin[Interval[_OrderableT]],
+    #     *,
+    #     dtype: Literal["Interval"] = ...,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> IntervalIndex[Interval[_OrderableT]]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: AxesData,
+    #     *,
+    #     dtype: Literal["Interval"],
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> IntervalIndex[Interval[Any]]: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: DatetimeIndex,
+    #     *,
+    #     dtype: TimestampDtypeArg | None = ...,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> DatetimeIndex: ...
+    # # generic overloads
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: Iterable[S1] | IndexOpsMixin[S1],
+    #     *,
+    #     dtype: type[S1] = ...,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> Self: ...
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: AxesData = ...,
+    #     *,
+    #     dtype: type[S1],
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> Self: ...
+    # # fallback overload
+    # @overload
+    # def __new__(
+    #     cls,
+    #     data: AxesData,
+    #     *,
+    #     dtype: Dtype = ...,
+    #     copy: bool = ...,
+    #     name: Hashable = ...,
+    #     tupleize_cols: bool = ...,
+    # ) -> Self: ...
+    # @property
+    # def str(
+    #     self,
+    # ) -> StringMethods[  # pyrefly: ignore[bad-specialization]
+    #     Self,
+    #     MultiIndex,
+    #     np_1darray_bool,
+    #     Index[list[_str]],
+    #     Index[int],
+    #     Index[bytes],
+    #     Index[_str],
+    #     Index,
+    # ]: ...
     @final
     def is_(self, other: Any) -> bool: ...
     def __len__(self) -> int: ...
@@ -410,9 +393,9 @@ class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
         fill_value: Scalar | None = None,
         **kwargs: Any,
     ) -> Self: ...
-    def repeat(
-        self, repeats: int | AnyArrayLikeInt | Sequence[int], axis: None = None
-    ) -> Self: ...
+    # def repeat(
+    #     self, repeats: int | AnyArrayLikeInt | Sequence[int], axis: None = None
+    # ) -> Self: ...
     def copy(self, name: Hashable = ..., deep: bool = False) -> Self: ...
     def format(
         self,
@@ -423,7 +406,7 @@ class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
     def to_series(
         self, index: Index | None = None, name: Hashable | None = None
     ) -> Series[S1]: ...
-    def to_frame(self, index: bool = True, name: Hashable = ...) -> DataFrame: ...
+    # def to_frame(self, index: bool = True, name: Hashable = ...) -> DataFrame: ...
     @property
     def name(self) -> Hashable | None: ...
     @name.setter
@@ -530,18 +513,18 @@ class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
     @property
     def values(self) -> np_1darray: ...
     def memory_usage(self, deep: bool = False) -> int: ...
-    @overload
-    def where(
-        self,
-        cond: Sequence[bool] | np_ndarray_bool | BooleanArray | IndexOpsMixin[bool],
-        other: S1 | Series[S1] | Self,
-    ) -> Self: ...
-    @overload
-    def where(
-        self,
-        cond: Sequence[bool] | np_ndarray_bool | BooleanArray | IndexOpsMixin[bool],
-        other: Scalar | AnyArrayLike | None = None,
-    ) -> Index: ...
+    # @overload
+    # def where(
+    #     self,
+    #     cond: Sequence[bool] | np_ndarray_bool | BooleanArray | IndexOpsMixin[bool],
+    #     other: S1 | Series[S1] | Self,
+    # ) -> Self: ...
+    # @overload
+    # def where(
+    #     self,
+    #     cond: Sequence[bool] | np_ndarray_bool | BooleanArray | IndexOpsMixin[bool],
+    #     other: Scalar | AnyArrayLike | None = None,
+    # ) -> Index: ...
     def __contains__(self, key: Hashable) -> bool: ...
     @overload
     def __getitem__(
@@ -556,11 +539,11 @@ class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
     ) -> Index[C2]: ...
     @overload
     def append(self, other: Index | Sequence[Index]) -> Index: ...
-    def putmask(
-        self,
-        mask: Sequence[bool] | np_ndarray_bool | BooleanArray | IndexOpsMixin[bool],
-        value: Scalar,
-    ) -> Index: ...
+    # def putmask(
+    #     self,
+    #     mask: Sequence[bool] | np_ndarray_bool | BooleanArray | IndexOpsMixin[bool],
+    #     value: Scalar,
+    # ) -> Index: ...
     def equals(self, other: Any) -> bool: ...
     @final
     def identical(self, other: Any) -> bool: ...
@@ -1220,7 +1203,7 @@ class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
 class _IndexSubclassBase(Index[S1], Generic[S1, GenericT_co]):
     @overload
     def to_numpy(
-        self: _IndexSubclassBase[Interval],
+        self: _IndexSubclassBase[Interval[Any]],
         dtype: type[T_INTERVAL_NP],
         copy: bool = False,
         na_value: Scalar = ...,

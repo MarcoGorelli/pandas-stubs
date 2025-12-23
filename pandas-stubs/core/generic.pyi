@@ -10,7 +10,6 @@ from collections.abc import (
     Sequence,
 )
 import datetime as dt
-import sqlite3
 import sys
 from typing import (
     Any,
@@ -25,7 +24,6 @@ import numpy as np
 from pandas import Index
 from pandas.core.resample import DatetimeIndexResampler
 from pandas.core.series import Series
-import sqlalchemy.engine
 from typing_extensions import (
     Never,
     Self,
@@ -36,7 +34,6 @@ from pandas._typing import (
     Axis,
     CompressionOptions,
     CSVQuoting,
-    DtypeArg,
     DtypeBackend,
     ExcelWriterMergeCells,
     FilePath,
@@ -46,7 +43,6 @@ from pandas._typing import (
     Frequency,
     HashableT1,
     HashableT2,
-    HDFCompLib,
     IgnoreRaise,
     IndexLabel,
     Level,
@@ -65,8 +61,6 @@ from pandas._typing import (
 )
 
 from pandas.io.excel import ExcelWriter
-from pandas.io.pytables import HDFStore
-from pandas.io.sql import SQLTable
 
 class NDFrame:
     __hash__: ClassVar[None]  # type: ignore[assignment] # pyright: ignore[reportIncompatibleMethodOverride]
@@ -132,25 +126,25 @@ class NDFrame:
         inf_rep: _str = "inf",
         freeze_panes: tuple[int, int] | None = ...,
     ) -> None: ...
-    @final
-    def to_hdf(
-        self,
-        path_or_buf: FilePath | HDFStore,
-        *,
-        key: _str,
-        mode: Literal["a", "w", "r+"] = ...,
-        complevel: int | None = ...,
-        complib: HDFCompLib | None = ...,
-        append: _bool = ...,
-        format: Literal["t", "table", "f", "fixed"] | None = ...,
-        index: _bool = ...,
-        min_itemsize: int | dict[HashableT1, int] | None = ...,
-        nan_rep: _str | None = ...,
-        dropna: _bool | None = ...,
-        data_columns: Literal[True] | list[HashableT2] | None = ...,
-        errors: OpenFileErrors = ...,
-        encoding: _str = ...,
-    ) -> None: ...
+    # @final
+    # def to_hdf(
+    #     self,
+    #     path_or_buf: FilePath | HDFStore,
+    #     *,
+    #     key: _str,
+    #     mode: Literal["a", "w", "r+"] = ...,
+    #     complevel: int | None = ...,
+    #     complib: HDFCompLib | None = ...,
+    #     append: _bool = ...,
+    #     format: Literal["t", "table", "f", "fixed"] | None = ...,
+    #     index: _bool = ...,
+    #     min_itemsize: int | dict[HashableT1, int] | None = ...,
+    #     nan_rep: _str | None = ...,
+    #     dropna: _bool | None = ...,
+    #     data_columns: Literal[True] | list[HashableT2] | None = ...,
+    #     errors: OpenFileErrors = ...,
+    #     encoding: _str = ...,
+    # ) -> None: ...
     @overload
     def to_markdown(
         self,
@@ -171,27 +165,27 @@ class NDFrame:
         storage_options: StorageOptions = ...,
         **kwargs: Any,
     ) -> _str: ...
-    @final
-    def to_sql(
-        self,
-        name: _str,
-        con: str | sqlalchemy.engine.Connectable | sqlite3.Connection,
-        *,
-        schema: _str | None = None,
-        if_exists: Literal["fail", "replace", "append", "delete_rows"] = "fail",
-        index: _bool = True,
-        index_label: IndexLabel = None,
-        chunksize: int | None = None,
-        dtype: DtypeArg | None = None,
-        method: (
-            Literal["multi"]
-            | Callable[
-                [SQLTable, Any, list[str], Iterable[tuple[Any, ...]]],
-                int | None,
-            ]
-            | None
-        ) = None,
-    ) -> int | None: ...
+    # @final
+    # def to_sql(
+    #     self,
+    #     name: _str,
+    #     con: str | sqlalchemy.engine.Connectable | sqlite3.Connection,
+    #     *,
+    #     schema: _str | None = None,
+    #     if_exists: Literal["fail", "replace", "append", "delete_rows"] = "fail",
+    #     index: _bool = True,
+    #     index_label: IndexLabel = None,
+    #     chunksize: int | None = None,
+    #     dtype: DtypeArg | None = None,
+    #     method: (
+    #         Literal["multi"]
+    #         | Callable[
+    #             [SQLTable, Any, list[str], Iterable[tuple[Any, ...]]],
+    #             int | None,
+    #         ]
+    #         | None
+    #     ) = None,
+    # ) -> int | None: ...
     @final
     def to_pickle(
         self,

@@ -1130,9 +1130,9 @@ StataDateFormat: TypeAlias = Literal[
 # `DataFrame.replace` also accepts mappings of these.
 ReplaceValue: TypeAlias = (
     Scalar
-    | Pattern
+    | Pattern[str]
     | NAType
-    | Sequence[Scalar | Pattern]
+    | Sequence[Scalar | Pattern[str]]
     | Mapping[HashableT, ScalarT]
     | Series
     | None

@@ -29,7 +29,6 @@ from pandas._libs import Timedelta
 from pandas._libs.tslibs import BaseOffset
 from pandas._libs.tslibs.period import Period
 from pandas._typing import (
-    AxesData,
     Frequency,
     Just,
     TimedeltaConvertibleTypes,
@@ -57,15 +56,15 @@ _DT_FACTOR_SEQ: TypeAlias = _DT_FACTOR | Sequence[_DT_FACTOR] | np_ndarray_td
 class TimedeltaIndex(
     DatetimeTimedeltaMixin[Timedelta, np.timedelta64], TimedeltaIndexProperties
 ):
-    def __new__(
-        cls,
-        data: Sequence[timedelta | Timedelta | np.timedelta64 | float] | AxesData = ...,
-        freq: Frequency = ...,
-        closed: object = ...,
-        dtype: Literal["<m8[ns]"] = ...,
-        copy: bool = ...,
-        name: str = ...,
-    ) -> Self: ...
+    # def __new__(
+    #     cls,
+    #     data: Sequence[timedelta | Timedelta | np.timedelta64 | float] | AxesData = ...,
+    #     freq: Frequency = ...,
+    #     closed: object = ...,
+    #     dtype: Literal["<m8[ns]"] = ...,
+    #     copy: bool = ...,
+    #     name: str = ...,
+    # ) -> Self: ...
     # various ignores needed for mypy, as we do want to restrict what can be used in
     # arithmetic for these types
     @overload  # type: ignore[override]

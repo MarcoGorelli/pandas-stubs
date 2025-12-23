@@ -3,7 +3,6 @@ from collections.abc import (
     Sequence,
 )
 from datetime import (
-    datetime,
     time,
     timedelta,
     tzinfo as _tzinfo,
@@ -11,19 +10,12 @@ from datetime import (
 import sys
 from typing import (
     Any,
-    Literal,
-    final,
     overload,
 )
 
 import numpy as np
-import pandas as pd
-from pandas.core.frame import DataFrame
 from pandas.core.indexes.accessors import DatetimeIndexProperties
-from pandas.core.indexes.base import Index
 from pandas.core.indexes.datetimelike import DatetimeTimedeltaMixin
-from pandas.core.indexes.timedeltas import TimedeltaIndex
-from pandas.core.series import Series
 from typing_extensions import (
     Never,
     Self,
@@ -31,7 +23,6 @@ from typing_extensions import (
 
 from pandas._libs.tslibs.timestamps import Timestamp
 from pandas._typing import (
-    AxesData,
     DateAndDatetimeLike,
     Frequency,
     IntervalClosedType,
@@ -39,9 +30,6 @@ from pandas._typing import (
     TimeZones,
     np_1darray_intp,
     np_ndarray,
-    np_ndarray_bool,
-    np_ndarray_dt,
-    np_ndarray_td,
 )
 
 from pandas.core.dtypes.dtypes import DatetimeTZDtype
@@ -51,18 +39,18 @@ from pandas.tseries.offsets import BaseOffset
 class DatetimeIndex(
     DatetimeTimedeltaMixin[Timestamp, np.datetime64], DatetimeIndexProperties
 ):
-    def __new__(
-        cls,
-        data: AxesData,
-        freq: Frequency = ...,
-        tz: TimeZones = ...,
-        ambiguous: Literal["infer", "NaT", "raise"] | np_ndarray_bool = "raise",
-        dayfirst: bool = False,
-        yearfirst: bool = False,
-        dtype: np.dtype[np.datetime64] | pd.DatetimeTZDtype | str | None = None,
-        copy: bool = False,
-        name: Hashable = None,
-    ) -> Self: ...
+    # def __new__(
+    #     cls,
+    #     data: AxesData,
+    #     freq: Frequency = ...,
+    #     tz: TimeZones = ...,
+    #     ambiguous: Literal["infer", "NaT", "raise"] | np_ndarray_bool = "raise",
+    #     dayfirst: bool = False,
+    #     yearfirst: bool = False,
+    #     dtype: np.dtype[np.datetime64] | pd.DatetimeTZDtype | str | None = None,
+    #     copy: bool = False,
+    #     name: Hashable = None,
+    # ) -> Self: ...
 
     # various ignores needed for mypy, as we do want to restrict what can be used in
     # arithmetic for these types
@@ -72,24 +60,24 @@ class DatetimeIndex(
     def __radd__(  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride]
         self, other: timedelta | BaseOffset
     ) -> Self: ...
-    @overload  # type: ignore[override]
-    def __sub__(  # pyrefly: ignore[bad-override]
-        self, other: datetime | np.datetime64 | np_ndarray_dt | Self
-    ) -> TimedeltaIndex: ...
-    @overload
-    def __sub__(  # pyright: ignore[reportIncompatibleMethodOverride] # ty: ignore[invalid-method-override]
-        self, other: timedelta | np.timedelta64 | np_ndarray_td | BaseOffset
-    ) -> Self: ...
+    # @overload  # type: ignore[override]
+    # def __sub__(  # pyrefly: ignore[bad-override]
+    #     self, other: datetime | np.datetime64 | np_ndarray_dt | Self
+    # ) -> TimedeltaIndex: ...
+    # @overload
+    # def __sub__(  # pyright: ignore[reportIncompatibleMethodOverride] # ty: ignore[invalid-method-override]
+    #     self, other: timedelta | np.timedelta64 | np_ndarray_td | BaseOffset
+    # ) -> Self: ...
     def __truediv__(  # type: ignore[override] # pyrefly: ignore[bad-override]
         self, other: np_ndarray
     ) -> Never: ...
     def __rtruediv__(  # type: ignore[override] # pyrefly: ignore[bad-override]
         self, other: np_ndarray
     ) -> Never: ...
-    @final
-    def to_series(
-        self, index: Index | None = None, name: Hashable | None = None
-    ) -> Series[Timestamp]: ...
+    # @final
+    # def to_series(
+    #     self, index: Index | None = None, name: Hashable | None = None
+    # ) -> Series[Timestamp]: ...
     def snap(self, freq: Frequency = "S") -> Self: ...
     @property
     def inferred_type(self) -> str: ...
@@ -103,8 +91,8 @@ class DatetimeIndex(
         include_start: bool = True,
         include_end: bool = True,
     ) -> np_1darray_intp: ...
-    def to_julian_date(self) -> Index[float]: ...
-    def isocalendar(self) -> DataFrame: ...
+    # def to_julian_date(self) -> Index[float]: ...
+    def isocalendar(self) -> Any: ...
     @property
     def tzinfo(self) -> _tzinfo | None: ...
     if sys.version_info >= (3, 11):

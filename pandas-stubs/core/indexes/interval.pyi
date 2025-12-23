@@ -4,6 +4,7 @@ from collections.abc import (
 )
 import datetime as dt
 from typing import (
+    Any,
     Literal,
     TypeAlias,
     overload,
@@ -243,7 +244,7 @@ class IntervalIndex(ExtensionIndex[IntervalT, np.object_], IntervalMixin):
     def __contains__(self, key: IntervalT) -> bool: ...  # type: ignore[overload-overlap] # pyright: ignore[reportOverlappingOverload]
     @overload
     def __contains__(self, key: object) -> Literal[False]: ...
-    def astype(self, dtype: DtypeArg, copy: bool = True) -> IntervalIndex: ...
+    def astype(self, dtype: DtypeArg, copy: bool = True) -> IntervalIndex[Any]: ...
     @property
     def inferred_type(self) -> str: ...
     def memory_usage(self, deep: bool = False) -> int: ...
@@ -254,8 +255,8 @@ class IntervalIndex(ExtensionIndex[IntervalT, np.object_], IntervalMixin):
     def left(self: IntervalIndex[Interval[_OrderableT]]) -> Index[_OrderableT]: ...
     @property
     def right(self: IntervalIndex[Interval[_OrderableT]]) -> Index[_OrderableT]: ...
-    mid = _MidDescriptor()
-    length = _LengthDescriptor()
+    # mid = _MidDescriptor()
+    # length = _LengthDescriptor()
     @overload  # type: ignore[override]
     def __getitem__(  # pyrefly: ignore[bad-override]
         self,
