@@ -10,7 +10,6 @@ from collections.abc import (
     Sequence,
 )
 import datetime as dt
-import sqlite3
 import sys
 from typing import (
     Any,
@@ -25,7 +24,6 @@ import numpy as np
 from pandas import Index
 from pandas.core.resample import DatetimeIndexResampler
 from pandas.core.series import Series
-from sqlalchemy.engine import Connectable
 from typing_extensions import (
     Never,
     Self,
@@ -53,6 +51,7 @@ from pandas._typing import (
     ListLike,
     OpenFileErrors,
     P,
+    SQLConnection,
     StorageOptions,
     T,
     TakeIndexer,
@@ -179,7 +178,7 @@ class NDFrame:
     def to_sql(
         self,
         name: _str,
-        con: str | Connectable | sqlite3.Connection,
+        con: SQLConnection,
         *,
         schema: _str | None = None,
         if_exists: Literal["fail", "replace", "append", "delete_rows"] = "fail",

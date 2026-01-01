@@ -5,7 +5,6 @@ from collections.abc import (
     Mapping,
     Sequence,
 )
-import sqlite3
 from typing import (
     Any,
     Literal,
@@ -14,7 +13,6 @@ from typing import (
 )
 
 from pandas.core.frame import DataFrame
-import sqlalchemy.engine
 from sqlalchemy.orm import FromStatement
 import sqlalchemy.sql.expression
 
@@ -24,10 +22,9 @@ from pandas._typing import (
     DtypeBackend,
     Scalar,
     SequenceNotStr,
+    SQLConnection,
     np_ndarray,
 )
-
-_SQLConnection: TypeAlias = str | sqlalchemy.engine.Connectable | sqlite3.Connection
 
 _SQLStatement: TypeAlias = (
     str
@@ -41,7 +38,7 @@ _SQLStatement: TypeAlias = (
 @overload
 def read_sql_table(
     table_name: str,
-    con: _SQLConnection,
+    con: SQLConnection,
     schema: str | None = ...,
     index_col: str | list[str] | None = ...,
     coerce_float: bool = ...,
@@ -54,7 +51,7 @@ def read_sql_table(
 @overload
 def read_sql_table(
     table_name: str,
-    con: _SQLConnection,
+    con: SQLConnection,
     schema: str | None = ...,
     index_col: str | list[str] | None = ...,
     coerce_float: bool = ...,
@@ -66,7 +63,7 @@ def read_sql_table(
 @overload
 def read_sql_query(
     sql: _SQLStatement,
-    con: _SQLConnection,
+    con: SQLConnection,
     index_col: str | list[str] | None = ...,
     coerce_float: bool = ...,
     params: (
@@ -86,7 +83,7 @@ def read_sql_query(
 @overload
 def read_sql_query(
     sql: _SQLStatement,
-    con: _SQLConnection,
+    con: SQLConnection,
     index_col: str | list[str] | None = ...,
     coerce_float: bool = ...,
     params: (
@@ -105,7 +102,7 @@ def read_sql_query(
 @overload
 def read_sql(
     sql: _SQLStatement,
-    con: _SQLConnection,
+    con: SQLConnection,
     index_col: str | list[str] | None = None,
     coerce_float: bool = True,
     params: (
@@ -125,7 +122,7 @@ def read_sql(
 @overload
 def read_sql(
     sql: _SQLStatement,
-    con: _SQLConnection,
+    con: SQLConnection,
     index_col: str | list[str] | None = None,
     coerce_float: bool = True,
     params: (

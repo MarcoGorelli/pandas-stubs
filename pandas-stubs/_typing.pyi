@@ -13,6 +13,7 @@ import datetime
 from datetime import tzinfo
 from os import PathLike
 from re import Pattern
+from sqlite3 import Connection
 import sys
 from typing import (
     TYPE_CHECKING,
@@ -39,6 +40,7 @@ from pandas.core.groupby.grouper import Grouper
 from pandas.core.indexes.base import Index
 from pandas.core.series import Series
 from pandas.core.tools.datetimes import FulldatetimeDict
+from sqlalchemy.engine import Connectable
 from typing_extensions import (
     ParamSpec,
     TypeVar,
@@ -1237,5 +1239,7 @@ class SupportsTrueDiv(Protocol[_T_contra, _T_co]):
 
 class SupportsRTrueDiv(Protocol[_T_contra, _T_co]):
     def __rtruediv__(self, x: _T_contra, /) -> _T_co: ...
+
+SQLConnection: TypeAlias = str | Connectable | Connection
 
 __all__ = ["npt", "type_t"]
