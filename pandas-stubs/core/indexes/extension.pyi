@@ -1,3 +1,4 @@
+from pandas._stubs_only import IndexSubclassBase
 
 from pandas._typing import (
     S1,
