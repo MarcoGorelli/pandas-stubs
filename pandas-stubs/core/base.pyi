@@ -23,7 +23,6 @@ from pandas.core.arrays.categorical import Categorical
 from pandas.core.arrays.floating import FloatingArray
 from pandas.core.arrays.integer import IntegerArray
 from pandas.core.arrays.timedeltas import TimedeltaArray
-from pandas.core.indexes.accessors import ArrayDescriptor
 from pandas.core.indexes.base import Index
 from pandas.core.indexes.timedeltas import TimedeltaIndex
 from pandas.core.series import Series
@@ -70,7 +69,7 @@ class IndexOpsMixin(OpsMixin, Generic[S1, GenericT_co]):
     def nbytes(self) -> int: ...
     @property
     def size(self) -> int: ...
-    array = ArrayDescriptor()
+    # array = ArrayDescriptor()
     @overload
     def to_numpy(
         self,

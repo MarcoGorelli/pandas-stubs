@@ -773,7 +773,7 @@ XMLParsers: TypeAlias = Literal["lxml", "etree"]
 HTMLFlavors: TypeAlias = Literal["lxml", "html5lib", "bs4"]
 
 # Interval closed type
-IntervalT = TypeVar("IntervalT", bound=Interval, default=Interval)
+IntervalT = TypeVar("IntervalT", bound=Interval, default=Interval[Any])
 IntervalLeftRight: TypeAlias = Literal["left", "right"]
 IntervalClosedType: TypeAlias = IntervalLeftRight | Literal["both", "neither"]
 

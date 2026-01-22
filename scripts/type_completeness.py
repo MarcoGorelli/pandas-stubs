@@ -53,6 +53,8 @@ EXCLUDE = [
     "pandas.io.formats.printing.*",
     "pandas.io.formats.string.*",
     "pandas.io.formats.xml.*",
+    # Not documented, not really part of public API
+    "pandas.api.executors.BaseExecutionEngine",
 ]
 THRESHOLD = 1
 
@@ -86,6 +88,8 @@ def run_pyright(venv_path: str) -> dict[str, Any]:
         text=True,
         capture_output=True,
     ).stdout
+    with open("out.json", "w") as fd:
+        fd.write(out)
     return json.loads(out)
 
 
@@ -133,6 +137,8 @@ def main() -> int:
         ).stdout.splitlines()
         for item in tracked_files:
             if not item.startswith("pandas-stubs"):
+                continue
+            if "_stubs_only" in item:
                 continue
             s = item
             d = pandas_dir / item.replace("pandas-stubs", "pandas")
