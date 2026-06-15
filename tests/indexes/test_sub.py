@@ -106,5 +106,5 @@ def test_sub_str_py_str() -> None:
     s = "abc"
 
     if TYPE_CHECKING_INVALID_USAGE:
-        _0 = left_i - s  # type: ignore[operator] # pyright:ignore[reportOperatorIssue,reportUnknownVariableType]
-        _1 = s - left_i  # type: ignore[operator] # pyright:ignore[reportOperatorIssue,reportUnknownVariableType]
+        _0 = left_i - s  # type: ignore[operator] # pyright:ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
+        _1 = s - left_i  # type: ignore[operator] # pyright:ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
