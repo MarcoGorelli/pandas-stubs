@@ -1,4 +1,3 @@
-# pyrefly: ignore-errors
 from pathlib import Path
 from typing import (
     Any,

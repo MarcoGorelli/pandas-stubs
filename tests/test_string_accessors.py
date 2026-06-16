@@ -1,4 +1,3 @@
-# pyrefly: ignore-errors
 import functools
 import re
 from typing import assert_type
@@ -150,7 +149,7 @@ def test_string_accessors_integer_series() -> None:
 
     # unlike findall, find doesn't accept a compiled pattern
     with pytest.raises(TypeError):
-        s.str.find(re.compile(r"p"))  # type: ignore[arg-type] # pyright: ignore[reportArgumentType]
+        s.str.find(re.compile(r"p"))  # type: ignore[arg-type] # pyright: ignore[reportArgumentType]  # pyrefly: ignore[bad-argument-type]
 
 
 def test_string_accessors_integer_index() -> None:
@@ -165,7 +164,7 @@ def test_string_accessors_integer_index() -> None:
 
     # unlike findall, find doesn't accept a compiled pattern
     with pytest.raises(TypeError):
-        idx.str.find(re.compile(r"p"))  # type: ignore[arg-type] # pyright: ignore[reportArgumentType]
+        idx.str.find(re.compile(r"p"))  # type: ignore[arg-type] # pyright: ignore[reportArgumentType]  # pyrefly: ignore[bad-argument-type]
 
 
 def test_string_accessors_string_series() -> None:

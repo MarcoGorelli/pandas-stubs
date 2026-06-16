@@ -1,4 +1,3 @@
-# pyrefly: ignore-errors
 from datetime import (
     datetime,
     timedelta,
@@ -33,85 +32,24 @@ def test_truediv_py_scalar(left: "pd.Series[pd.Timedelta]") -> None:
     s, d = datetime(2025, 9, 24), timedelta(seconds=1)
 
     if TYPE_CHECKING_INVALID_USAGE:
-        _00 = left / b  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]
-    check(assert_type(left / i, "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta)
-    check(assert_type(left / f, "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta)
-    if TYPE_CHECKING_INVALID_USAGE:
-        _03 = left / c  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]
-        _04 = left / s  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]
-    check(assert_type(left / d, "pd.Series[float]"), pd.Series, np.floating)
-
-    if TYPE_CHECKING_INVALID_USAGE:
-        _10 = b / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]
-        _11 = i / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]
-        _12 = f / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]
-        _13 = c / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]
-        _14 = s / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]
-    check(assert_type(d / left, "pd.Series[float]"), pd.Series, np.floating)
-
-    if TYPE_CHECKING_INVALID_USAGE:
-        left.truediv(b)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]
-    check(
-        assert_type(left.truediv(i), "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta
-    )
-    check(
-        assert_type(left.truediv(f), "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta
-    )
-    if TYPE_CHECKING_INVALID_USAGE:
-        left.truediv(c)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]
-        left.truediv(s)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]
-    check(assert_type(left.truediv(d), "pd.Series[float]"), pd.Series, np.floating)
-
-    if TYPE_CHECKING_INVALID_USAGE:
-        left.div(b)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]
-    check(assert_type(left.div(i), "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta)
-    check(assert_type(left.div(f), "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta)
-    if TYPE_CHECKING_INVALID_USAGE:
-        left.div(c)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
-        left.div(s)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
-    check(assert_type(left.div(d), "pd.Series[float]"), pd.Series, np.floating)
-
-    if TYPE_CHECKING_INVALID_USAGE:
-        left.rtruediv(b)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]
-        left.rtruediv(i)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]
-        left.rtruediv(f)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
-        left.rtruediv(c)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
-        left.rtruediv(s)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
-    check(assert_type(left.rtruediv(d), "pd.Series[float]"), pd.Series, np.floating)
-
-    if TYPE_CHECKING_INVALID_USAGE:
-        left.rdiv(b)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]
-        left.rdiv(i)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]
-        left.rdiv(f)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
-        left.rdiv(c)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
-        left.rdiv(s)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
-    check(assert_type(left.rdiv(d), "pd.Series[float]"), pd.Series, np.floating)
-
-
-def test_truediv_py_sequence(left: "pd.Series[pd.Timedelta]") -> None:
-    """Test pd.Series[pd.Timedelta] / Python native sequences"""
-    b, i, f, c = [True], [2], [1.5], [1.7j]
-    s, d = [datetime(2025, 9, 24)], [timedelta(seconds=1)]
-
-    if TYPE_CHECKING_INVALID_USAGE:
-        _00 = left / b  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]
+        _00 = left / b  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
     check(assert_type(left / i, "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta)
     check(assert_type(left / f, "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta)
     if TYPE_CHECKING_INVALID_USAGE:
         _03 = left / c  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
         _04 = left / s  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
-    check(assert_type(left / d, "pd.Series[float]"), pd.Series, float)
+    check(assert_type(left / d, "pd.Series[float]"), pd.Series, np.floating)
 
     if TYPE_CHECKING_INVALID_USAGE:
-        _10 = b / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]
-        _11 = i / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]
+        _10 = b / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
+        _11 = i / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
         _12 = f / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
         _13 = c / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
         _14 = s / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
     check(assert_type(d / left, "pd.Series[float]"), pd.Series, np.floating)
 
     if TYPE_CHECKING_INVALID_USAGE:
-        left.truediv(b)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]
+        left.truediv(b)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
     check(
         assert_type(left.truediv(i), "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta
     )
@@ -124,7 +62,7 @@ def test_truediv_py_sequence(left: "pd.Series[pd.Timedelta]") -> None:
     check(assert_type(left.truediv(d), "pd.Series[float]"), pd.Series, np.floating)
 
     if TYPE_CHECKING_INVALID_USAGE:
-        left.div(b)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]
+        left.div(b)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
     check(assert_type(left.div(i), "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta)
     check(assert_type(left.div(f), "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta)
     if TYPE_CHECKING_INVALID_USAGE:
@@ -133,16 +71,77 @@ def test_truediv_py_sequence(left: "pd.Series[pd.Timedelta]") -> None:
     check(assert_type(left.div(d), "pd.Series[float]"), pd.Series, np.floating)
 
     if TYPE_CHECKING_INVALID_USAGE:
-        left.rtruediv(b)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]
-        left.rtruediv(i)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]
+        left.rtruediv(b)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+        left.rtruediv(i)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+        left.rtruediv(f)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+        left.rtruediv(c)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+        left.rtruediv(s)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+    check(assert_type(left.rtruediv(d), "pd.Series[float]"), pd.Series, np.floating)
+
+    if TYPE_CHECKING_INVALID_USAGE:
+        left.rdiv(b)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+        left.rdiv(i)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+        left.rdiv(f)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+        left.rdiv(c)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+        left.rdiv(s)  # type: ignore[call-overload] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+    check(assert_type(left.rdiv(d), "pd.Series[float]"), pd.Series, np.floating)
+
+
+def test_truediv_py_sequence(left: "pd.Series[pd.Timedelta]") -> None:
+    """Test pd.Series[pd.Timedelta] / Python native sequences"""
+    b, i, f, c = [True], [2], [1.5], [1.7j]
+    s, d = [datetime(2025, 9, 24)], [timedelta(seconds=1)]
+
+    if TYPE_CHECKING_INVALID_USAGE:
+        _00 = left / b  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
+    check(assert_type(left / i, "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta)
+    check(assert_type(left / f, "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta)
+    if TYPE_CHECKING_INVALID_USAGE:
+        _03 = left / c  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
+        _04 = left / s  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
+    check(assert_type(left / d, "pd.Series[float]"), pd.Series, float)
+
+    if TYPE_CHECKING_INVALID_USAGE:
+        _10 = b / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
+        _11 = i / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
+        _12 = f / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
+        _13 = c / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
+        _14 = s / left  # type: ignore[operator] # pyright: ignore[reportOperatorIssue,reportUnknownVariableType]  # pyrefly: ignore[unsupported-operation]
+    check(assert_type(d / left, "pd.Series[float]"), pd.Series, np.floating)
+
+    if TYPE_CHECKING_INVALID_USAGE:
+        left.truediv(b)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+    check(
+        assert_type(left.truediv(i), "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta
+    )
+    check(
+        assert_type(left.truediv(f), "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta
+    )
+    if TYPE_CHECKING_INVALID_USAGE:
+        left.truediv(c)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+        left.truediv(s)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+    check(assert_type(left.truediv(d), "pd.Series[float]"), pd.Series, np.floating)
+
+    if TYPE_CHECKING_INVALID_USAGE:
+        left.div(b)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+    check(assert_type(left.div(i), "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta)
+    check(assert_type(left.div(f), "pd.Series[pd.Timedelta]"), pd.Series, pd.Timedelta)
+    if TYPE_CHECKING_INVALID_USAGE:
+        left.div(c)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+        left.div(s)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+    check(assert_type(left.div(d), "pd.Series[float]"), pd.Series, np.floating)
+
+    if TYPE_CHECKING_INVALID_USAGE:
+        left.rtruediv(b)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+        left.rtruediv(i)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
         left.rtruediv(f)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
         left.rtruediv(c)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
         left.rtruediv(s)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
     check(assert_type(left.rtruediv(d), "pd.Series[float]"), pd.Series, np.floating)
 
     if TYPE_CHECKING_INVALID_USAGE:
-        left.rdiv(b)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]
-        left.rdiv(i)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]
+        left.rdiv(b)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
+        left.rdiv(i)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
         left.rdiv(f)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
         left.rdiv(c)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
         left.rdiv(s)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]

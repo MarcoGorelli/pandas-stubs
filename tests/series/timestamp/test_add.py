@@ -1,4 +1,3 @@
-# pyrefly: ignore-errors
 from datetime import (
     datetime,
     timedelta,
@@ -130,11 +129,11 @@ def test_add_numpy_array() -> None:
     check(assert_type(d + left, np_ndarray_td), pd.Series, pd.Timestamp)
 
     if TYPE_CHECKING_INVALID_USAGE:
-        left.add(s)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]
+        left.add(s)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
     check(assert_type(left.add(d), "pd.Series[pd.Timestamp]"), pd.Series, pd.Timestamp)
 
     if TYPE_CHECKING_INVALID_USAGE:
-        left.radd(s)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]
+        left.radd(s)  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportCallIssue]  # pyrefly: ignore[no-matching-overload]
     check(assert_type(left.radd(d), "pd.Series[pd.Timestamp]"), pd.Series, pd.Timestamp)
 
 

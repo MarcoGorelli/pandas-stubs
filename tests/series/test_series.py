@@ -1,4 +1,3 @@
-# pyrefly: ignore-errors
 from __future__ import annotations
 
 from collections import UserDict

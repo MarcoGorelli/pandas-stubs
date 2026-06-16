@@ -1,4 +1,3 @@
-# pyrefly: ignore-errors
 from datetime import (
     datetime,
     timedelta,
@@ -177,7 +176,9 @@ def test_truediv_numpy_array(left_i: pd.Series) -> None:
     )
     if TYPE_CHECKING_INVALID_USAGE:
         assert_type(s / left_i, Any)  # TODO: numpy/numpy#30173 numpy should reject this
-        assert_type(d / left_i, Any)  # pyright: ignore[reportAssertTypeFailure]  # pyrefly: ignore[assert-type]
+        assert_type(
+            d / left_i, Any
+        )  # pyright: ignore[reportAssertTypeFailure]  # pyrefly: ignore[assert-type]
 
     check(assert_type(left_i.truediv(b), pd.Series), pd.Series)
     check(assert_type(left_i.truediv(i), pd.Series), pd.Series)

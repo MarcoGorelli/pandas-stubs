@@ -1,4 +1,3 @@
-# pyrefly: ignore-errors
 from typing import (
     Never,
     assert_type,
