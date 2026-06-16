@@ -93,17 +93,23 @@ def test_floordiv_numpy_array(left_i: pd.Index) -> None:
     # checking, where our `__rfloordiv__` cannot override. At runtime, they lead to
     # errors or pd.Index.
     check(
-        assert_type(b // left_i, Any),  # pyright: ignore[reportAssertTypeFailure]
+        assert_type(
+            b // left_i, Any
+        ),  # pyright: ignore[reportAssertTypeFailure] # pyrefly: ignore[assert-type]
         pd.Index,
         np.integer,
     )
     check(
-        assert_type(i // left_i, Any),  # pyright: ignore[reportAssertTypeFailure]
+        assert_type(
+            i // left_i, Any
+        ),  # pyright: ignore[reportAssertTypeFailure] # pyrefly: ignore[assert-type]
         pd.Index,
         np.integer,
     )
     check(
-        assert_type(f // left_i, Any),  # pyright: ignore[reportAssertTypeFailure]
+        assert_type(
+            f // left_i, Any
+        ),  # pyright: ignore[reportAssertTypeFailure] # pyrefly: ignore[assert-type]
         pd.Index,
         np.floating,
     )
@@ -111,7 +117,9 @@ def test_floordiv_numpy_array(left_i: pd.Index) -> None:
         assert_type(c // left_i, Any)
         assert_type(s // left_i, Any)
     check(
-        assert_type(d // left_i, Any),  # pyright: ignore[reportAssertTypeFailure]
+        assert_type(
+            d // left_i, Any
+        ),  # pyright: ignore[reportAssertTypeFailure] # pyrefly: ignore[assert-type]
         pd.TimedeltaIndex,
         pd.Timedelta,
     )
