@@ -144,7 +144,9 @@ def test_floordiv_numpy_array(left_i: pd.Series) -> None:
         assert_type(c // left_i, Any)
         assert_type(s // left_i, Any)
     check(
-        assert_type(d // left_i, Any),  # pyright: ignore[reportAssertTypeFailure]
+        assert_type(
+            d // left_i, Any
+        ),  # pyright: ignore[reportAssertTypeFailure]  # pyrefly: ignore[assert-type]
         pd.Series,
         pd.Timedelta,
     )
@@ -154,14 +156,14 @@ def test_floordiv_numpy_array(left_i: pd.Series) -> None:
     check(assert_type(left_i.floordiv(f), pd.Series), pd.Series, np.floating)
 
     def _23() -> None:  # pyright: ignore[reportUnusedFunction]
-        assert_type(
-            left_i.floordiv(c),  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportAssertTypeFailure,reportCallIssue]
+        assert_type(  # pyrefly: ignore[assert-type]
+            left_i.floordiv(c),  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportAssertTypeFailure,reportCallIssue] # pyrefly: ignore[no-matching-overload]
             Never,
         )
 
     def _24() -> None:  # pyright: ignore[reportUnusedFunction]
-        assert_type(
-            left_i.floordiv(s),  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportAssertTypeFailure,reportCallIssue]
+        assert_type(  # pyrefly: ignore[assert-type]
+            left_i.floordiv(s),  # type: ignore[arg-type] # pyright: ignore[reportArgumentType,reportAssertTypeFailure,reportCallIssue] # pyrefly: ignore[no-matching-overload]
             Never,
         )
 

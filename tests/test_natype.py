@@ -92,7 +92,7 @@ def test_arithmetic() -> None:
         pd.Series,
     )
     check(
-        assert_type(
+        assert_type(  # pyrefly: ignore[assert-type]
             divmod(na, idx_int),
             tuple[pd.Index, pd.Index],
         ),
@@ -100,8 +100,8 @@ def test_arithmetic() -> None:
         pd.Index,
     )
     check(
-        assert_type(  # pyright: ignore[reportUnknownArgumentType]
-            divmod(  # pyright: ignore[reportCallIssue, reportAssertTypeFailure]
+        assert_type(  # pyright: ignore[reportUnknownArgumentType] # pyrefly: ignore[assert-type]
+            divmod(  # pyright: ignore[reportCallIssue, reportAssertTypeFailure] # pyrefly: ignore[no-matching-overload]
                 na, 1  # pyright: ignore[reportArgumentType]
             ),
             tuple[NAType, NAType],

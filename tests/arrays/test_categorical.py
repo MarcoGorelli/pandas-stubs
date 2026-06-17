@@ -1,5 +1,7 @@
 """Test module for methods in pandas.core.arrays.categorical."""
 
+# pyrefly: ignore-errors
+
 from typing import (
     assert_type,
 )

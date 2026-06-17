@@ -109,4 +109,7 @@ def test_constructor(values: np_ndarray_object | StringArray) -> None:
 def test_dtype() -> None:
     arr = pd.array(["a"], "string[python]")
     check(assert_type(arr.dtype, "pd.StringDtype[Literal['python']]"), pd.StringDtype)
-    assert assert_type(arr.dtype.storage, Literal["python"]) == "python"
+    # https://github.com/facebook/pyrefly/issues/3742
+    assert (
+        assert_type(arr.dtype.storage, Literal["python"]) == "python"
+    )  # pyrefly: ignore[no-matching-overload, assert-type]
