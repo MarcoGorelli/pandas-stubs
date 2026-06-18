@@ -121,5 +121,6 @@ def test_dtype() -> None:
     check(assert_type(arr.dtype, "pd.StringDtype[Literal['pyarrow']]"), pd.StringDtype)
     # https://github.com/facebook/pyrefly/issues/3742
     assert (
-        assert_type(arr.dtype.storage, Literal["pyarrow"]) == "pyarrow"
-    )  # pyrefly: ignore[no-matching-overload, assert-type]
+        assert_type(arr.dtype.storage, Literal["pyarrow"])
+        == "pyarrow"  # pyrefly: ignore[no-matching-overload, assert-type]
+    )

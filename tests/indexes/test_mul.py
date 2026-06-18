@@ -67,25 +67,25 @@ def test_mul_numpy_array(left_i: pd.Index) -> None:
     # `Index`.
     # microsoft/pyright#10924
     check(
-        assert_type(
+        assert_type(  # pyrefly: ignore[assert-type]
             b * left_i, Any
         ),  # pyright: ignore[reportAssertTypeFailure]  # pyrefly: ignore[assert-type]
         pd.Index,
     )
     check(
-        assert_type(
+        assert_type(  # pyrefly: ignore[assert-type]
             i * left_i, Any
         ),  # pyright: ignore[reportAssertTypeFailure]  # pyrefly: ignore[assert-type]
         pd.Index,
     )
     check(
-        assert_type(
+        assert_type(  # pyrefly: ignore[assert-type]
             f * left_i, Any
         ),  # pyright: ignore[reportAssertTypeFailure]  # pyrefly: ignore[assert-type]
         pd.Index,
     )
     check(
-        assert_type(
+        assert_type(  # pyrefly: ignore[assert-type]
             c * left_i, Any
         ),  # pyright: ignore[reportAssertTypeFailure]  # pyrefly: ignore[assert-type]
         pd.Index,

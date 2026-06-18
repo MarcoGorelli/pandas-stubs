@@ -144,9 +144,9 @@ def test_floordiv_numpy_array(left_i: pd.Series) -> None:
         assert_type(c // left_i, Any)
         assert_type(s // left_i, Any)
     check(
-        assert_type(
+        assert_type(  # pyrefly: ignore[assert-type]
             d // left_i, Any
-        ),  # pyright: ignore[reportAssertTypeFailure]  # pyrefly: ignore[assert-type]
+        ),  # pyright: ignore[reportAssertTypeFailure]
         pd.Series,
         pd.Timedelta,
     )

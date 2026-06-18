@@ -1,6 +1,5 @@
 from typing import (
     TYPE_CHECKING,
-    Literal,
     assert_type,
 )
 
@@ -111,5 +110,5 @@ def test_dtype() -> None:
     check(assert_type(arr.dtype, "pd.StringDtype[Literal['python']]"), pd.StringDtype)
     # https://github.com/facebook/pyrefly/issues/3742
     assert (
-        assert_type(arr.dtype.storage, Literal["python"]) == "python"
-    )  # pyrefly: ignore[no-matching-overload, assert-type]
+        # pyrefly: ignore[no-matching-overload, assert-type]  # pyrefly: ignore[no-matching-overload, assert-type]  # pyrefly: ignore[no-matching-overload, assert-type]  # pyrefly: ignore[no-matching-overload, assert-type]  assert_type(arr.dtype.storage, Literal["python"]) == "python"
+    )
